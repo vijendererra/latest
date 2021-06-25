@@ -1,0 +1,56 @@
+<div *ngIf="loginService.isLoggedIn()">
+  <nav class="navbar navbar-expand-lg navbar-dark " id="navbar">
+    <div class="collapse navbar-collapse" id="exp-navbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/curd" routerLinkActive="active" style="color: aliceblue;">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="expense/report" routerLinkActive="active" style="color: aliceblue;">Report</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="expense/addexpense" routerLinkActive="active" style="color: aliceblue;">Add
+            Expense</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="about" routerLinkActive="active" style="color: aliceblue;">About</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="theme" role="button" data-toggle="dropdown" aria-haspopup="true"
+           aria-expanded="false"> Theme</a>
+           <div class="dropdown-menu">
+             <button class="dropdown-item first" (click)="theme('first')" > Applay</button>
+             <button class="dropdown-item second" (click)="theme('second')" >Applay</button>
+             <button class="dropdown-item third" (click)="theme('third')" >Applay</button>
+           </div>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-md-0" style="padding-right: 5% ;">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
+              style="color: aliceblue;" aria-expanded="false">Welcome:<span style="color:black;">{{currentUser}}
+                <img [src]="profile" alt="Avatar"></span></a>
+            <div class="dropdown-menu" aria-labelledby="dropdown">
+              <a class="dropdown-item" routerLink="/views">My Profile</a>
+              <a class="dropdown-item" routerLink="/funtions/fun" routerLinkActive="active"> DynamicForm</a>
+              <a class="dropdown-item" routerLink="/views/pwdchange"> Change Password</a>
+              <a class="dropdown-item" (click)="logOut()" style="cursor: pointer;">Logout</a>
+            </div>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </nav>
+</div>
+<br/>
+<router-outlet></router-outlet>
+<br/>
+<div *ngIf="loginService.isLoggedIn()">
+
+  <footer class="footer  fixed-bottom" id="footer">
+    <div class="container text-center text">
+      &copy; Sample MEAN app by Vijender | SampleApp 2020
+    </div>
+  </footer>
+</div>

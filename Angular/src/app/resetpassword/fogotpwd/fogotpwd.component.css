@@ -1,0 +1,13 @@
+.form-gap {
+    padding-top: 70px;
+}
+.error{
+    font-style: italic;
+    color: red;
+}
+h2{
+    color: springgreen;
+}
+.success{
+    color:rgb(100, 236, 9);
+}

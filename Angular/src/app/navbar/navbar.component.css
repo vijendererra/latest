@@ -1,0 +1,12 @@
+.footer{
+   
+    height: 30px;
+    color:whitesmoke;
+}
+#navbar{
+    color:white;
+}
+.active {
+    text-decoration: underline;
+    padding-bottom: 3px;        
+}

@@ -1,0 +1,44 @@
+.footer{
+   
+    height: 30px;
+    color:whitesmoke;
+}
+#navbar{
+    color:white;
+}
+.active {
+    text-decoration: underline;
+    padding-bottom: 3px;        
+}
+img {
+    border-radius: 50%;
+    height: 30px;
+    width:30px
+  }
+.dropdown:hover>.dropdown-menu{
+    display: block;
+   
+}
+.dropdown-item{
+    position: relative;
+    padding: 10px 20px;
+border-bottom:1px solid #c8ced3;
+        &:last-child{
+            border-bottom: 0;
+        }
+}
+.first{
+    color:#008cba ;
+    text-align: center;
+    font-weight: 400;
+}
+.second{
+    color:#06ba00 ;
+    text-align: center;
+    font-weight: 400;
+}
+.third{
+    color:#ba0082 ;
+    text-align: center;
+    font-weight: 400;
+}

@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary " id="navbar">
+  <div class="collapse navbar-collapse" id="exp-navbar">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/curd" routerLinkActive="active" style="color: aliceblue;">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="expense/report" routerLinkActive="active" style="color: aliceblue;">Report</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="expense/addexpense" routerLinkActive="active" style="color: aliceblue;">Add
+          Expense</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="about" routerLinkActive="active" style="color: aliceblue;">About</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-md-0" style="padding-right: 5% ;">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
+            style="color: aliceblue;" aria-expanded="false">Welcome:<span
+              style="color:black;">{{currentUser}}</span></a>
+          <div class="dropdown-menu" aria-labelledby="dropdown">
+            <a class="dropdown-item" routerLink="/views">My Profile</a>
+            <a class="dropdown-item" routerLink="/views/pwdchange"> Change Password</a>
+            <a class="dropdown-item" (click)="logOut()">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </form>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>
+
+<footer class="footer bg-primary fixed-bottom" id="footer">
+  <div class="container text-center">
+    &copy; Sample MEAN app by Vijender | SampleApp 2020
+  </div>
+</footer>

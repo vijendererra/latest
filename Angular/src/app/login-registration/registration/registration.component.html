@@ -1,0 +1,67 @@
+<div class="signup-form">
+  <form [formGroup]="RegForm" (ngSubmit)="register()">
+    <h2>Register</h2>
+    <p class="hint-text">Create your account. It's free and only takes a minute.</p>
+    <div *ngIf="regform">
+      <div class="form-group">
+        <input type="text" class="form-control" name="name" placeholder="Name" formControlName="name">
+        <div *ngIf="(RegForm.get('name').touched )" >
+          <div class="alert alert-danger" *ngIf="RegForm.get('name').errors?.required">
+            Name Required...
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="email" class="form-control" name="email" placeholder="Email" required="required"
+          formControlName="email">
+        <span class="text-danger" *ngIf="(RegForm.get('email').touched) && RegForm.get('email').errors?.email">
+          Email Required...
+        </span>
+        <span class="text-danger" *ngIf="RegForm.get('email').errors?.email">
+          Email Required...
+        </span>
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control" name="password" placeholder="Password" required="required"
+          formControlName="password">
+
+      </div>
+      <div class="form-group">
+        <input type="Confirmpassword" class="form-control" name="confirm_password" placeholder="Confirm Password"
+          required="required" formControlName="confirmpassword">
+
+      </div>
+    </div>
+    <div *ngIf="regform1">
+      <div class="form-group">
+        <input type="Confirmpassword" class="form-control" name="confirm_password" placeholder="phone number"
+          (change)="cpwdNotEmpty()" required="required" formControlName="phonenumber">
+      </div>
+      <div class="form-group">
+        <input type="Confirmpassword" class="form-control" name="confirm_password" placeholder="address"
+          (change)="cpwdNotEmpty()" required="required" formControlName="address">
+      </div>
+      <div class="form-group">
+        <input type="Confirmpassword" class="form-control" name="confirm_password" placeholder="pinnumber"
+          (change)="cpwdNotEmpty()" required="required" formControlName="pinnumber">
+      </div>
+    </div>
+    <div class="form-group" *ngIf="submit">
+      <label class="form-check-label"><input type="checkbox" required="required"> I accept the <a href="#"
+          style="color:dodgerblue">Terms of
+          Use</a> &amp; <a href="#" style="color:dodgerblue">Privacy Policy</a></label>
+    </div>
+    <div class="error" *ngIf="serverErrorMessagesEmail">
+      {{serverErrorMessagesEmail}}
+    </div>
+    <div>
+      <button *ngIf="next" type="button" class="btn btn-success" (click)=increase()>Next</button>&nbsp;
+      <button *ngIf="return" type="button" class="btn btn-success" (click)=decrease()>Previous</button>
+      <br />
+    </div>
+    <div class="form-group">
+      <button *ngIf="submit" type="submit" class="btn btn-success btn-lg btn-block">Register Now</button>
+    </div>
+    <div class="text-center">Already have an account? <a routerLink="" style="color:dodgerblue">login</a></div>
+  </form>
+</div>
