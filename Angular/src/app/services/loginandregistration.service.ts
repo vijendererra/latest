@@ -87,6 +87,12 @@ export class LoginandregistrationService {
       catchError(this.handleError)
     );
   }
+  valiDateOtp(data){
+    const url = environment.URL + '/validateOTP';
+    return this.http.post(url, data, this.noAuthHeader).pipe(
+      catchError(this.handleError)
+    );
+  }
 
   resetPwd(pwd: LoginAndRedistration, token: String) {
     // const url = '/resetpwd/' + token;

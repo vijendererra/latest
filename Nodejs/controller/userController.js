@@ -4,6 +4,10 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var nodemailer = require("nodemailer");
 var myReq = require("../error/reqLogger");
+var session = require('express-session');
+var LocalStorage = require('node-localstorage').LocalStorage,
+    localStorage = new LocalStorage('./scratch');
+
 
 var fs = require('fs');
 // var util=require('util');
@@ -11,12 +15,12 @@ var fs = require('fs');
 
 
 // User-Registration;
-exports.registration =async function (req, res) {
-    try{
-        var phonenumber=req.body.phonenumber;
-       validator.validatePhoneNumber(phonenumber);
-    //    console.log("K",number);
-    // if (validator.validatePhoneNumber(req.body.phonenumber)) {
+exports.registration = async function (req, res) {
+    try {
+        var phonenumber = req.body.phonenumber;
+        validator.validatePhoneNumber(phonenumber);
+        //    console.log("K",number);
+        // if (validator.validatePhoneNumber(req.body.phonenumber)) {
         const requestBody = req.body;
         var userReg = new User({
             name: requestBody.name,
@@ -27,7 +31,7 @@ exports.registration =async function (req, res) {
             address: requestBody.address,
             pinnumber: requestBody.pinnumber,
         });
-       let result= await userReg.save((err, result) => {
+        let result = await userReg.save((err, result) => {
             if (err && err.code === 11000) {
                 res.status(400).json({ message: "Emaii was Already Exist" });
             } else {
@@ -36,10 +40,10 @@ exports.registration =async function (req, res) {
         });
         return result;
     }
-    catch(err){
+    catch (err) {
         console.log(err)
     }
-    
+
     // }
     // else if (!validator.validatePhoneNumber(req.body.phonenumber)) {
     //     res.status(400).json({ message: "Please Enter valid Number" });
@@ -164,14 +168,82 @@ exports.forgotpwd = (req, res) => {
             return res.status(404).json({ message: "User not found" })
         }
         else {
-            // console.log(user)
-            const token = jwt.sign({ _id: user._id }, 'secretkey', { expiresIn: '5m' });
+            var number = Math.floor((Math.random() * 9999) + 1000);
+            const data = {
+                userID: user._id,
+                userName: user.name,
+                unicNumber: number,
+            }
+
+            req.session.user = data;
+            localStorage.setItem('userID', user._id);
+            localStorage.setItem('unicNumber', number);
+            localStorage.setItem('userName', user.name)
+            localStorage.setItem('usermail', user.email)
+            // console.log(localStorage.getItem('userID'))
+            var smtpTransport = nodemailer.createTransport({
+                service: 'Gmail',
+                auth: {
+                    user: 'nodemailer0222@gmail.com',
+                    pass: 'Vijender@123'
+                }
+            });
+            var mailOptions = {
+                to: user.email,
+                from: 'learntocodeinfo@gmail.com',
+                subject: 'Vijju-Practice-App Password Reset',
+                text: 'Deare ' + req.session.user.userName + '\n\n' +
+                    'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+                    'Please use below OTP (Don"t Share this to any one)\n\n' +
+                    'OneTimePassword:' + req.session.user.unicNumber + '\n\n' +
+                    // https://vijju-practice.herokuapp.com/
+                    // 'http://vijju-practice.herokuapp.com/forgotpwd/reset/' + token + '\n\n' +
+                    'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+            };
+            smtpTransport.sendMail(mailOptions, function (err) {
+                if (err) {
+                    console.log(err)
+                }
+                else {
+                    // console.log(req.session.user);
+                    res.json({ message: 'Please Check The Mail' });
+                    // res.json(req.session.user);
+                    setTimeout(() => {
+                        req.session.destroy();
+                        localStorage.removeItem('userID');
+                        localStorage.removeItem('unicNumber');
+                        localStorage.removeItem('userName');
+                        localStorage.removeItem('usermail')
+                        // console.log(localStorage.getItem('userID'))
+                    }, 60000);
+                }
+            });
+        }
+    })
+}
+
+exports.validateOtp = (req, res) => {
+    const otp = req.body.otp;
+    // console.log(localStorage.getItem('userID'))
+
+    if (localStorage.getItem('userID') == null) {
+        res.json({ message: "Session Time Out" })
+    }
+
+    else {
+        if (otp == localStorage.getItem('unicNumber')) {
+            // console.log("OTP macthed")
+            const userId = localStorage.getItem('userID')
+            const token = jwt.sign({ _id: userId }, 'secretkey', { expiresIn: '3m' });
             // console.log(token)
-            return User.findOneAndUpdate({ _id: user._id }, { $set: { resetPasswordToken: token } }, (err, sucess) => {
+            return User.findOneAndUpdate({ _id: userId }, { $set: { resetPasswordToken: token } }, (err, sucess) => {
                 if (err) {
                     return res.status(200).json({ message: "token invalid or expires" })
                 }
                 else {
+                    const email=localStorage.getItem('usermail');
+                    const username=localStorage.getItem('userName');
+                    // console.log(email);
                     var smtpTransport = nodemailer.createTransport({
                         service: 'Gmail',
                         auth: {
@@ -180,10 +252,11 @@ exports.forgotpwd = (req, res) => {
                         }
                     });
                     var mailOptions = {
-                        to: user.email,
+                        to: email,
                         from: 'learntocodeinfo@gmail.com',
                         subject: 'Vijju-Practice-App Password Reset',
-                        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+                        text: 'Deare ' + username + '\n\n' +
+                            'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                             'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
                             'http://localhost:4200/forgotpwd/reset/' + token + '\n\n' +
                             // https://vijju-practice.herokuapp.com/
@@ -196,13 +269,19 @@ exports.forgotpwd = (req, res) => {
                         }
                         else {
                             // console.log('mail sended succesfully');
-                            res.json({ message: 'Please Check The Mail' });
+                            res.json({ message: "Please loging your mail and set new password" })
+                            // res.json(req.session.user);
                         }
                     });
                 }
             })
         }
-    })
+        else {
+            res.json({ message: 'OTP not macthed ' })
+            // console.log("otp not macthed")
+        }
+    }
+
 }
 
 exports.resetPwd = (req, res) => {

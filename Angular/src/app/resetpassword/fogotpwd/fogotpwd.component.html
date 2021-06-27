@@ -5,7 +5,7 @@
             <div class="col-md-6 col-md-offset-6"  >
                 <div class="panel panel-default" >
                     <div class="panel-body">
-                        <div class="text-center">
+                        <div class="text-center" *ngIf="view">
                             <h3><i class="fa fa-lock fa-4x"></i></h3>
                             <h2 class="text-center">Forgot Password?</h2>
                             <p>You can reset your password here.</p>
@@ -20,7 +20,7 @@
                                                 type="email" formControlName="email" required>
                                         </div>
                                     </div>
-                                    <div class="error" *ngIf="serverErrorMessagesEmail">
+                                    <div class="error" *ngIf="errorMsg">
                                         {{serverErrorMessagesEmail}}
                                     </div>
                                     <div class="form-group">
@@ -28,9 +28,42 @@
                                             class="btn btn-lg btn-primary btn-block" value="Reset Password"
                                             (click)="forGotPwd()">
                                     </div>
-                                    <div class="success" *ngIf="successMessage">
+                                </form><br />
+                                <span class="psw">Create An Account <a routerLink="/register">sinup</a></span>
+                            </div>
+                        </div>
+
+                        <div  class="text-center" *ngIf="!view">
+                            <h3><i class="fa fa-lock fa-4x"></i></h3>
+                            <h2 class="text-center">Forgot Password?</h2>
+                            <p>Please check your mail and sbmit otp.</p>
+                            <div class="panel-body">
+
+                                <form [formGroup]="ForgotForm" class="form">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i
+                                                    class="glyphicon glyphicon-envelope color-blue"></i></span>
+                                            <input name="email" placeholder="Enter One Time Password" class="form-control"
+                                                type="email" formControlName="otp" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="button" name="recover-submit"
+                                            class="btn btn-lg btn-primary btn-block" value="Submit Otp"
+                                            (click)="valdateotp()" >
+                                    </div>
+                                    <div class="error" *ngIf="errorMsg">
+                                        {{successMessage}} 
+                                    </div>
+                                    <div class="error" *ngIf="timer">
+                                        <P >Time:{{timeLeft}}</P>
+                                    </div>
+                                    <div class="success" *ngIf="success">
                                         {{successMessage}} <a href="https://mail.google.com" target="_blank">Login</a>
                                     </div>
+                                    <br/>
+                                    <span class="psw">Resend OTP: <a (click)="forGotPwd()" style="color: blue;cursor: pointer;">Click</a></span>
                                 </form><br />
                                 <span class="psw">Create An Account <a routerLink="/register">sinup</a></span>
                             </div>
