@@ -3,6 +3,8 @@ import { LoginandregistrationService } from '../../services/loginandregistration
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { clearInterval } from 'timers';
+import { start } from 'repl';
 
 @Component({
   selector: 'app-fogotpwd',
@@ -19,7 +21,8 @@ export class FogotpwdComponent implements OnInit {
   timer: boolean;
   errorMsg: boolean;
   success: boolean;
-  timeLeft: number = 60;
+  timeLeft: number;
+  interval;
   constructor(private service: LoginandregistrationService,
     private formBuilder: FormBuilder,
     private _router: Router,
@@ -31,16 +34,22 @@ export class FogotpwdComponent implements OnInit {
       email: ['', [Validators.required]],
       otp: ['', [Validators.required]],
     })
+
   }
+
+ 
 
   forGotPwd() {
     this.errorMsg = false;
     this.timer = false;
+    this.success=false;
     this.service.forGotPwd(this.ForgotForm.value).subscribe(
       res => {
         // this._router.navigateByUrl('/reset')
         this.view = false;
         this.timer = true;
+        // clearInterval(this.interval);
+        // startInter(this.interval);
         this.timeCountDown();
       },
       error => {
@@ -61,6 +70,7 @@ export class FogotpwdComponent implements OnInit {
         this.response = res;
         this.successMessage = this.response.message;
         if (this.successMessage == "Please loging your mail and set new password") {
+          this._router.navigateByUrl('/forgotpwd/reset/'+this.response.jwttoken);
           this.timer=false;
           this.success = true;
         }
@@ -76,17 +86,18 @@ export class FogotpwdComponent implements OnInit {
 
   timeCountDown() {
     this.timeLeft = 60;
-    setInterval(() => {
+    clearInterval(this.interval);
+    this.interval=setInterval(() => {
       if (this.timeLeft > 0) {
         this.timeLeft--;
       } else {
         this.timeLeft = 0;
       }
     }, 1000)
+    
   }
+  
 
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
-  }
+  
 
 }

@@ -19,6 +19,7 @@ router.post('/login', UserController.userLogin);
 router.get('/logedin',UserController.jwtVeryfied, UserController.userLogedIn);
 router.post('/forgotpwd', UserController.forgotpwd);
 router.post('/validateOTP', UserController.validateOtp);
+router.get('/tokenexpires',UserController.tokenexpirs);
 router.post('/resetpwd/:token', UserController.resetPwd);
 router.post('/changepwd',UserController.changePwd)
 

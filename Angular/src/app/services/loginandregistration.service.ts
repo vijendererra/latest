@@ -94,6 +94,13 @@ export class LoginandregistrationService {
     );
   }
 
+  tokenTimeVerify(){
+    const url = environment.URL + '/tokenexpires';
+    return this.http.get(url, this.noAuthHeader).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   resetPwd(pwd: LoginAndRedistration, token: String) {
     // const url = '/resetpwd/' + token;
     const url = environment.URL + '/resetpwd/' + token;

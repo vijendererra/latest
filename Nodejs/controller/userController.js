@@ -241,8 +241,8 @@ exports.validateOtp = (req, res) => {
                     return res.status(200).json({ message: "token invalid or expires" })
                 }
                 else {
-                    const email=localStorage.getItem('usermail');
-                    const username=localStorage.getItem('userName');
+                    const email = localStorage.getItem('usermail');
+                    const username = localStorage.getItem('userName');
                     // console.log(email);
                     var smtpTransport = nodemailer.createTransport({
                         service: 'Gmail',
@@ -269,19 +269,43 @@ exports.validateOtp = (req, res) => {
                         }
                         else {
                             // console.log('mail sended succesfully');
-                            res.json({ message: "Please loging your mail and set new password" })
+                            res.json({ message: "Please loging your mail and set new password", jwttoken: token })
                             // res.json(req.session.user);
+                            localStorage.setItem('token', true)
+                            setTimeout(() => {
+                                localStorage.removeItem('token')
+                            }, 60000);
+
+                            var time=120
+                            clearInterval(count);
+                           var count= setInterval(() => {
+                                if(time>0){
+                                    time--;
+                                }
+                                else{
+                                    time=0;
+                                }
+                            }, 1000);
                         }
                     });
                 }
             })
         }
         else {
-            res.json({ message: 'OTP not macthed ' })
+            res.json({ message: 'OTP not matched ' })
             // console.log("otp not macthed")
         }
     }
 
+}
+
+exports.tokenexpirs = (req, res) => {
+    if (localStorage.getItem('token') == null) {
+        res.json({ message: "token expires" })
+    }
+    else {
+        res.json({ message: "token not expires" })
+    }
 }
 
 exports.resetPwd = (req, res) => {

@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./resetpwd.component.css']
 })
 export class ResetpwdComponent implements OnInit {
+  jwttoken;
 
   serverErrorMessagesEmail: string;
   constructor(private service: LoginandregistrationService,
@@ -19,16 +20,28 @@ export class ResetpwdComponent implements OnInit {
   ResetForm: FormGroup;
 
   public token = "";
+
   ngOnInit() {
-    this.token = this._activatedRoute.snapshot.paramMap.get("token")
-    // console.log("token:",this.token);
-    this._router.navigateByUrl('/forgotpwd/reset/' + this.token);
+  this.tokenTime();
+  }
 
-    this.ResetForm = this.formBuilder.group({
-      password: ['', [Validators.required]],
-      confirmpassword: ['', [Validators.required]],
-    })
-
+  tokenTime(){
+    this.service.tokenTimeVerify().subscribe(
+      res=>{
+        this.jwttoken=res;
+        if(this.jwttoken.message=="token expires"){
+          this._router.navigateByUrl('/');
+        }
+        else{
+          this.token = this._activatedRoute.snapshot.paramMap.get("token")
+          this._router.navigateByUrl('/forgotpwd/reset/' + this.token);
+          this.ResetForm = this.formBuilder.group({
+            password: ['', [Validators.required]],
+            confirmpassword: ['', [Validators.required]],
+          })
+        }
+      }
+    )
   }
 
   resetPwd() {
