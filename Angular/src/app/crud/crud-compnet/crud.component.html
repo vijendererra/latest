@@ -1,79 +1,33 @@
-<p-dialog [(visible)]="display" [modal]="true" appendTo="body" [responsive]="true" [style]="{'widh':'500px'}"
-  [minY]="100">
-  <p-header class="dialogHeader">
-    {{formTitle}}
-  </p-header>
-  <div>
-    <form [formGroup]="RegForm">
-      <div class="container">
-        <hr>
-        <label for="Nmae"><b>Name:</b></label>
-        <input type="text" placeholder="Enter Nmae" name="name" formControlName="name" required>
-        <label for="Role"><b>Role:</b></label>
-        <input type="text" placeholder="Enter Role" name="role" formControlName="role" required>
-        <label for="Location"><b>Location</b></label>
-        <input type="text" placeholder="Repeat Location" name="location" formControlName="location" required>
-        <hr>
-        <button type="submit" class="registerbtn" (click)="submitForm()">{{button}}</button>
-      </div>
-    </form>
-  </div>
-</p-dialog>
-
-<div class="search" matSuffix>
-  <button class="btn btn-link " (click)="showDialog('Add',row)">
-    <i class="fa fa-plus"></i>
-  </button>
-  <mat-form-field class="serach-form" floatLabel="never">
-    <input matInput [(ngModel)]="searchKey" placeholder="search" autocomplete="off" (keyup)="applyFilter()">
-    <button class="btn btn-link " matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey"
-      (click)="clrearSearch()">
-      <i class="fa fa-close"></i>
-    </button>
-  </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>Choose one</mat-label>
-    <mat-select [(ngModel)]="dropdownSearch" (click)="applyFilterDropDown()">
-      <mat-option>Clear</mat-option>
-      <mat-option value="valid">harish</mat-option>
-      <mat-option value="invalid">vijender</mat-option>
-    </mat-select>
-  </mat-form-field>
-
-
-
-
-  <!-- <select class="custom-select"[(ngModel)]="dropdownSearch" (click)="applyFilterDropDown()" >
-    <option value="" >Choose your city</option>
-    <option >harish</option>
-    <option >sravan</option>
-    <option >vijender</option>
- </select>
-
- <select class="custom-select"[(ngModel)]="dropdownSearchAge" (click)="applyAgeFilterDropDown()" >
-  <option value="" >Choose your city</option>
-  <option >20-30</option>
-  <option >30+</option>
-  <option >40+</option>
-</select> -->
-</div>
-<div>
+<!-- <div>
   <select [(ngModel)]="sletedValue" (click)="fun()">
     <option *ngFor="let data of arr ">{{data}}</option>
   </select>
-</div>
+</div> -->
+<form [formGroup]="SearchForm">
 
-<div class="justify-content-end mr-4 mt-2" style="text-align: right;">
-  <form [formGroup]="SearchForm">
-    <mat-form-field appearance="fill">
+  <div class="justify-content-end  mt-1" style="text-align: right;">
+
+    <span class="search mr-2" matSuffix>
+      <button class="btn btn-link " (click)="showDialog('Add','row')">
+        <i class="fa fa-plus"></i>
+      </button>
+    </span>
+
+
+    <mat-form-field appearance="fill" class="mr-3">
       <mat-label>--Action--</mat-label>
       <mat-select formControlName="nameSearch" (selectionChange)="filter()">
-        <!-- <mat-option>Clear</mat-option> -->
         <mat-option *ngFor="let data of names|keyvalue" [value]="data.key">{{data.key}}</mat-option>
       </mat-select>
     </mat-form-field>
-  </form>
-</div>
+  </div>
+</form>
+<mat-form-field class="serach-form mr-2" floatLabel="never">
+  <input matInput [(ngModel)]="searchKey" placeholder="search" autocomplete="off" (input)="applyFilter()">
+  <button class="btn btn-link " matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey" (click)="clrearSearch()">
+    <i class="fa fa-close"></i>
+  </button>
+</mat-form-field>
 
 <div>
   <!-- <textarea [(ngModel)]='title' name="title" rows="5" cols="50"></textarea> -->
@@ -120,7 +74,7 @@
             <span>No Tasks Found</span>
           </div>
           <ng-container *ngIf="data.length>0">
-            <table mat-table [dataSource]="dataTable" matSort>
+            <table mat-table [dataSource]="dataTable" matSort (matSortChange)="sortData($event)">
               <ng-container matColumnDef="checkBox">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                   <mat-checkbox (change)="allSelected($event)" [(ngModel)]="selectdAll">
@@ -132,29 +86,60 @@
               </ng-container>
               <!-- Position Column -->
               <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="applay">
+                  <div class="row">
+                    <div class="col-md-5 ">
+                      Name
+                    </div>
+                    <div class="col-md-8">
+                      <mat-form-field appearance="legacy" style="width: 100px;">
+                        <input matInput [formControl]="name" placeholder="search">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </th>
                 <td mat-cell *matCellDef="let element"> {{element.name}} </td>
               </ng-container>
 
               <!-- Name Column -->
               <ng-container matColumnDef="role">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="applay">
+                  <div class="row">
+                    <div class="col-md-5 ">
+                      Role
+                    </div>
+                    <div class="col-md-8">
+                      <mat-form-field appearance="legacy" style="width: 100px;">
+                        <input matInput (click)="deBounce(searchValue)" placeholder="search" [(ngModel)]="searchValue">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </th>
                 <td mat-cell *matCellDef="let element"> {{element.role}} </td>
               </ng-container>
               <!-- Name Column -->
-              <ng-container matColumnDef="age">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Age </th>
+              <!-- <ng-container matColumnDef="age">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="applay"> Age </th>
                 <td mat-cell *matCellDef="let element"> {{element.age}} </td>
-              </ng-container>
+              </ng-container> -->
 
-              <!-- Weight Column -->
               <ng-container matColumnDef="location">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="applay">
+                  <div class="row">
+                    <div class="col-md-5 ">
+                      Location
+                    </div>
+                    <div class="col-md-8">
+                      <mat-form-field appearance="legacy" style="width: 100px;">
+                        <input matInput [formControl]="location" placeholder="search">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </th>
                 <td mat-cell *matCellDef="let element"> {{element.location}} </td>
               </ng-container>
-
               <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <th mat-header-cell *matHeaderCellDef class="applay"> Actions </th>
                 <td mat-cell *matCellDef="let row">
                   <button class="btn btn-link " (click)="showDialog('Edit',row)">
                     <i class="fa fa-edit" aria-hidden="true"></i>
@@ -164,19 +149,17 @@
                   </button>
                 </td>
               </ng-container>
-
               <ng-container matColumnDef="loading">
                 <mat-footer-cell *matFooterCellDef colspan="6">
                   Loading Data
                 </mat-footer-cell>
               </ng-container>
-
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
               <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide':dataTable!=null}"></mat-footer-row>
             </table>
             <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [length]="totalSize"
-              [pageIndex]="currentPage" (page)="pageEvent=handlePage($event)" showFirstLastButtons></mat-paginator>
+              [pageIndex]="currentPage" (page)="handlePage($event)" showFirstLastButtons></mat-paginator>
           </ng-container>
         </div>
       </div>
@@ -190,16 +173,56 @@
   <p-header class="dialogHeader">
     Conferm Action
   </p-header>
-  {{message}}
+  Are you sure to delete
   <p-footer>
     <button class="btn btn-primary" (click)="deleteConfim('no')">No </button>
     <button class="btn btn-primary" (click)="deleteConfim('yes')">Yes</button>
   </p-footer>
 </p-dialog>
 
-<button (click)="childView=true">View </button>
-<button (click)="childView=false">hide </button>
-<app-child [viewchild]="childView"></app-child>
-
-<br/>
-<br/>
+<p-dialog [(visible)]="display" [maximizable]="true" [responsive]="true" [style]="{'widh':'500px'}">
+  <p-header>
+    <span class="dialogHeader"> {{formTitle}}</span>
+  </p-header>
+  <div>
+    <form [formGroup]="RegForm">
+      <div class="container">
+        <hr>
+        <div class="row">
+          <div class="col-md-6 form-group">
+            <label><b>Name:</b> </label>
+            <input class="form-control" type="text" placeholder="Enter Nmae" formControlName="name" required>
+          </div>
+          <div class="col-md-6 form-group">
+            <label><b>Role:</b> </label>
+            <input class="form-control" type="text" placeholder="Enter Role" name="role" formControlName="role"
+              required>
+          </div>
+          <div class="col-md-6 form-group">
+            <label><b>Location:</b> </label>
+            <input class="form-control" type="text" placeholder="Repeat Location" name="location"
+              formControlName="location" required>
+          </div>
+          <div class="example-container col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Enter your email</mat-label>
+              <input matInput placeholder="pat@example.com" required>
+              <!-- <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error> -->
+            </mat-form-field>
+          </div>
+        </div>
+        <hr>
+        <div class="d-flex justify-content-end mr-3">
+          <button class="btn btn-primary" (click)="submitForm()">{{button}}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</p-dialog>
+<div>
+  <!-- <button (click)="childView=true">View </button>
+  <button (click)="childView=false">hide </button> -->
+  <app-child [viewchild]="'childView'"></app-child>
+</div>
+<br />
+<br />

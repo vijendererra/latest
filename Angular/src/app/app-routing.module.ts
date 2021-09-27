@@ -31,12 +31,23 @@ const routes: Routes = [
     // loadChildren:'./funtions-module/funtions-module.module#FuntionsModuleModule',canActivate:[AouthGuard]
   },
   {
+    path:'practice',
+    loadChildren:()=>import('./practice/practice.module').then(m=>m.PracticeModule)
+    // loadChildren:'./funtions-module/funtions-module.module#FuntionsModuleModule',canActivate:[AouthGuard]
+  },
+  {
+    path:'dynamicdatatable',
+    loadChildren:()=>import('./dynamic-data-tables/dynamic-data-tables.module').then(m=>m.DynamicDataTablesModule)
+    // loadChildren:'./funtions-module/funtions-module.module#FuntionsModuleModule',canActivate:[AouthGuard]
+  },
+
+  {
     path: '**', component: PagenotfoundComponent
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }), ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

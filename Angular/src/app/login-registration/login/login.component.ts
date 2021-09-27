@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
         this.userLogedIn();
       },
       error => {
-        console.log(error)
+        // console.log(error)
         this.serverErrorMessagesEmail = error.message;
       }
     )
@@ -58,13 +58,13 @@ export class LoginComponent implements OnInit {
     this.service.logedin().subscribe(
       res => {
         this.userData = res;
-        console.log(this.userData);
+        // console.log(this.userData);
         localStorage.setItem('name', this.userData.name);
         localStorage.setItem("id", this.userData._id);
         if (this.userData.image != undefined) {
           localStorage.removeItem('profile');
           this.url = "http://localhost:2020/" + this.userData.image;
-          console.log(this.url);
+          // console.log(this.url);
           this.service.img(this.url);
         }
         this._router.navigateByUrl('/curd');

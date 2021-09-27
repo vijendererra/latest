@@ -1,19 +1,23 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { CrudService } from '../../services/crud.service'
 import { CrudModel } from '../model/model';
 import { LoginandregistrationService } from '../../services/loginandregistration.service'
 
 // import {MatPaginator ,MatSort ,} from '@angular/material/paginator';
-import { MatTableDataSource, MatSort, MatPaginator, PageEvent } from '@angular/material';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { element } from 'protractor';
 import * as JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-crud',
   templateUrl: './crud.component.html',
-  styleUrls: ['./crud.component.css']
+  styleUrls: ['./crud.component.css'],
 })
 export class CrudComponent implements OnInit {
   dropdownSearch: string;
@@ -30,9 +34,12 @@ export class CrudComponent implements OnInit {
   id: any;
   deleConfemation: boolean;
   sletedValue: string;
-  constructor(private formBuilder: FormBuilder, private service: CrudService, private src: LoginandregistrationService) { }
+  columnArray = [];
+  timer: NodeJS.Timeout;
+  constructor(private formBuilder: FormBuilder, private service: CrudService, private src: LoginandregistrationService,
+    public snackBar: MatSnackBar) { }
 
-  displayedColumns: string[] = ['checkBox', 'name', 'role', 'age', 'location', 'actions'];
+  displayedColumns: string[] = ['checkBox', 'name', 'role', 'location', 'actions'];
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -41,7 +48,7 @@ export class CrudComponent implements OnInit {
   SearchForm: FormGroup;
   private d: {};
   public tasks: any[];
-  public pagSize = 5;
+  public pageSize = 5;
   public currentPage = 0;
   public totalSize = 0;
   dialogaction: String;
@@ -54,9 +61,33 @@ export class CrudComponent implements OnInit {
   title;
   uploadFiles;
 
+  name = new FormControl('');
+  role = new FormControl('');
+  location = new FormControl('');
+  searchValue;
   ngOnInit() {
-    document.getElementById('navbar').style.display = 'flex';
-    document.getElementById('footer').style.display = "flex";
+    this.name.valueChanges.pipe(
+      debounceTime(500),
+      distinctUntilChanged()).subscribe(
+        val => {
+          this.applayFiltr(val, 'name');
+        }
+      )
+    this.role.valueChanges.pipe(
+      debounceTime(500),
+      distinctUntilChanged()).subscribe(
+        val => {
+          this.applayFiltr(val, 'role');
+        }
+      )
+    this.location.valueChanges.pipe(
+      debounceTime(500),
+      distinctUntilChanged()).subscribe(
+        val => {
+          this.applayFiltr(val, 'location');
+        }
+      )
+  
     this.sr();
     this.RegForm = this.formBuilder.group({
       _id: [''],
@@ -67,16 +98,24 @@ export class CrudComponent implements OnInit {
 
     this.SearchForm = this.formBuilder.group({
       nameSearch: [''],
+      searchKey: [''],
       ageSerach: [],
     })
     this.getData();
   }
 
 
+  deBounce(val){
+
+  clearTimeout(this.timer)
+   this.timer= setTimeout(() => {
+      console.log(this.searchValue);
+    }, 3000);
+  }
   sr() {
     // this.d= this.src.get();
     this.src.share.subscribe(res => this.d = res);
-    console.log("d:", this.d)
+    // console.log("d:", this.d)
   }
   showDialog(action, row) {
     this.display = true;
@@ -100,20 +139,26 @@ export class CrudComponent implements OnInit {
     }
   }
 
-  submitForm() {debugger
-    console.log(this.RegForm.value)
+  submitForm() {
     if (this.dialogaction == "Add") {
       this.service.postEmp(this.RegForm.value).subscribe((res) => {
-        // console.log(this.RegForm.value);
-        // console.log("res:", res)
         this.display = false;
+        this.snackBar.open("Save Successfully...", "dismiss", {
+          duration: 2000,
+          verticalPosition: 'top'
+        });
         this.getData();
       });
     }
     else if (this.dialogaction == "Edit") {
       this.service.putEmp(this.RegForm.value).subscribe((res) => {
-        // console.log("res:", res)
         this.display = false;
+        this.snackBar.open("Updated Successfully", "dismiss", {
+          duration: 2000,
+          verticalPosition: 'top',
+          horizontalPosition:'center',
+          panelClass: 'snackbar-style'
+        });
         this.getData();
       });
     }
@@ -172,12 +217,12 @@ export class CrudComponent implements OnInit {
 
   handlePage(event?: PageEvent) {
     this.currentPage = event.pageIndex;
-    this.pagSize = event.pageSize;
+    this.pageSize = event.pageSize;
     this.iterator();
   }
   private iterator() {
-    const end = (this.currentPage + 1) * this.pagSize;
-    const start = this.currentPage * this.pagSize;
+    const end = (this.currentPage + 1) * this.pageSize;
+    const start = this.currentPage * this.pageSize;
     const part = this.tasks.slice(start, end);
     this.dataTable.data = part;
 
@@ -223,6 +268,8 @@ export class CrudComponent implements OnInit {
   }
 
   applyFilter() {
+    console.log(this.searchKey)
+
     this.dataTable.filter = this.searchKey.trim().toLocaleLowerCase();
   }
 
@@ -241,11 +288,11 @@ export class CrudComponent implements OnInit {
       // console.log(this.dropdownSearchAge);
     }
     else if (this.dropdownSearchAge === "20-30") {
-      console.log(this.dropdownSearchAge);
+      // console.log(this.dropdownSearchAge);
       let minimunAge = 20;
       let maximumAge = 30;
       this.dataTable.data = this.data.filter(product => {
-        console.log(product);
+        // console.log(product);
         return product.age >= minimunAge
           && product.age <= maximumAge
       });
@@ -328,7 +375,7 @@ export class CrudComponent implements OnInit {
         }
       }
     }
-    console.log(this.selectedArray);
+    // console.log(this.selectedArray);
   }
   seletedRow(event, row) {
     if (event.checked) {
@@ -383,22 +430,90 @@ export class CrudComponent implements OnInit {
   }
 
   dynamicDownlod() {
-    const data={
-      name:"vijju",
-      content:null,
-      type:".txt"
+    const data = {
+      name: "vijju",
+      content: null,
+      type: ".txt"
     }
 
-    var file=data.content;
-    var v=document.createElement('a');
-    v.setAttribute('id','sample')
-    v.download=data.name+data.type;
-    v.href='data:appliction/octet-stream;base64,'+file;
+    var file = data.content;
+    var v = document.createElement('a');
+    v.setAttribute('id', 'sample')
+    v.download = data.name + data.type;
+    v.href = 'data:appliction/octet-stream;base64,' + file;
     document.body.appendChild(v);
     v.click();
     v.remove();
   }
 
-}
+  applayFiltr(filterVal, columnName) {
+    const val = filterVal;
+    const colName = columnName;
+    const obj = {
+      columnName: colName,
+      value: val
+    }
+    if (val == "") {
+      
+      this.columnArray.forEach((ele, i) => {
+        if (ele.columnName == colName) {
+          this.columnArray.splice(i, 1)
+        }
+      });
+    }
+    else {
+      if (this.columnArray.length > 0) {
+        this.columnArray.forEach((ele, i) => {
+          if (ele.columnName== colName) {
+            this.columnArray.splice(i, 1)
+          }
+        });
+        this.columnArray.push(obj)
+      }
+      else {
+        this.columnArray.push(obj);
+      }
+    }
 
+    this.filteredData()
+  }
+  filteredData() {
+    console.log(this.columnArray)
+  }
+
+
+
+
+  sortData(sort: Sort) {
+    const data = this.dataTable.data.slice();
+    if (!sort.active || sort.direction === '') {
+      this.dataTable.data = data;
+      return;
+    }
+
+    this.dataTable.data = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      // this.displayedColumns.forEach(ele => {
+      //   switch (sort.active) {
+      //     case ele: return compare(a.ele, b.ele, isAsc);
+      //   }
+      // });
+
+
+      switch (sort.active) {
+        case 'name': return compare(a.name, b.name, isAsc);
+        case 'role': return compare(a.role, b.role, isAsc);
+        case 'age': return compare(a.age, b.age, isAsc);
+        case 'location': return compare(a.location, b.location, isAsc);
+        default: return 0;
+      }
+    });
+  }
+
+
+
+}
+function compare(a: number | string, b: number | string, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+}
 

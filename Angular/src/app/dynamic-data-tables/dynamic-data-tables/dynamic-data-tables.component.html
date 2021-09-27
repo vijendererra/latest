@@ -1,0 +1,35 @@
+<app-dynamicdatatables [tableData]="dynamicData" (emitactions)="doActions($event)"></app-dynamicdatatables>
+
+<p-dialog [(visible)]="showForm" [maximizable]="true" [responsive]="true" [style]="{'widh':'500px'}">
+    <p-header>
+            <span class="dialogHeader"> {{formTitle}}</span>
+    </p-header>
+    <div>
+        <form [formGroup]="saveForm">
+            <div class="container">
+                <hr>
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label><b>Name:</b> </label>
+                        <input class="form-control" type="text" placeholder="Enter Nmae" formControlName="name"
+                            required>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label><b>Role:</b> </label>
+                        <input class="form-control" type="text" placeholder="Enter Role" name="role"
+                            formControlName="role" required>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label><b>Location:</b> </label>
+                        <input class="form-control" type="text" placeholder="Repeat Location" name="location"
+                            formControlName="location" required>
+                    </div>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-end mr-3">
+                    <button class="btn btn-primary" (click)="submitForm()">{{button}}</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</p-dialog>

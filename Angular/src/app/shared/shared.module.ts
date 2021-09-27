@@ -5,7 +5,10 @@ import {ButtonModule} from 'primeng/button';
 import {MeterialModule} from '../meterial/meterial.module';
 import {DialogModule} from 'primeng/dialog';
 import { ChildComponent } from '../comman/child/child.component';
-
+import { DndModule } from 'ngx-drag-drop';
+import { DynamicdatatablesComponent } from '../comman/dynamicdatatables/dynamicdatatables.component';
+import { Ng2FilterPipeModule } from 'ng2-filter-pipe';
+import { MatTabsModule } from '@angular/material/tabs';
 
 
 
@@ -19,10 +22,14 @@ import { ChildComponent } from '../comman/child/child.component';
     DialogModule,
     ReactiveFormsModule,
     FormsModule,
+    DndModule,
+    Ng2FilterPipeModule,
+    MatTabsModule
     
   ],
   declarations: [
-    ChildComponent
+    ChildComponent,
+    DynamicdatatablesComponent,
   ],
   exports:[
     CommonModule,
@@ -32,8 +39,14 @@ import { ChildComponent } from '../comman/child/child.component';
     DialogModule,
     ReactiveFormsModule,
     FormsModule,
-    ChildComponent
-    
+    DndModule,
+    Ng2FilterPipeModule ,
+    MatTabsModule,
+
+    ChildComponent,
+    DynamicdatatablesComponent,
+
+
   ]
 })
 export class SharedModule { }

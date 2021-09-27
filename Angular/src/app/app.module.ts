@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +15,8 @@ import { SharedModule } from './shared/shared.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { initializeKeycloak } from './uitility/app.init';
 
 
 
@@ -23,7 +25,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     AppComponent,
     PagenotfoundComponent,
     NavbarComponent,
-    
+       
   ],
   imports: [
 
@@ -33,7 +35,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     CommonModule,
     SharedModule,
     HttpClientModule,
-
+    KeycloakAngularModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
@@ -41,7 +43,13 @@ import { NavbarComponent } from './navbar/navbar.component';
     multi: true
   }, CrudService,
     LoginandregistrationService,
-    AouthGuard
+    AouthGuard,
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: initializeKeycloak,
+    //   multi: true,
+    //   deps: [KeycloakService],
+    // },
   ],
   bootstrap: [AppComponent]
 })

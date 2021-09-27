@@ -1,0 +1,497 @@
+<div class="row mx-0">
+    <div class="col-md-3">
+        <h6 style="color: blue;">Form Controls</h6>
+        <div class="card">
+            <div class="card-body">
+                <input class="searchBox" placeholder="search">
+                <div class="animated mt-3" style="height:500px;overflow-x: auto;">
+                    <div class="fileds" *ngFor="let item of fileds  ">
+                        <div class="sfield pinter shadow-bg mr-1 mt-2" [dndDraggable]="item"
+                            [dndEffectAllowed]="'copy'">
+                            <i [ngClass]="item.icon" class="fa text pull-left"></i>
+                            <span>{{item.label}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <h6 style="color: blue;">Create Form</h6>
+        <div class="card">
+            <div *ngIf="viewForm" class="card-body1">
+                <section dndDropzone (dndDrop)="onDrop($event,draggedFileds)" class="dndDropArea"
+                    [ngClass]="{'empty':true}" style="min-height:580px;overflow-x: auto;">
+                    <div class="row mx-0">
+                        <ng-container *ngFor="let main of draggedFileds;let i=index;">
+                            <div class="field form-group col-md-12" (dndMoved)="onDragged(main,draggedFileds,'move')"
+                                [dndEffectAllowed]="'all'" [dndDraggable]="main">
+                                <div class="row form-group form1">
+                                    <div class="col-1">
+                                        <i class="fa fa-ellipsis-v dndHandle1" dndHandle></i>
+                                    </div>
+                                    <div class="col-8">
+                                        <h4>{{main.name}}</h4>
+                                    </div>
+                                    <div class="col-3 d-flex justify-content-between symbol">
+                                        <i *ngIf="main.toggle" (click)="main.toggle=false"
+                                            class="fa fa-chevron-up mx-1 mr-3"></i>
+                                        <i *ngIf="!main.toggle" (click)="main.toggle=true"
+                                            class="fa fa-chevron-down mx-1 mr-3"></i>
+                                        <i (click)="removeField(i)" class="fa fa-trash mx-1"></i>
+                                    </div>
+                                </div>
+                                <div *ngIf="main.toggle" class="toggle-wrapper" style="min-height:300px">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input class="form-control" type="text" [(ngModel)]="main.name"
+                                            (ngModelChange)="label($event,main.name,i)" />
+                                    </div>
+                                    <section class="group" dndDropzone (dndDrop)="onDrop1($event,i)" class="dndDropArea"
+                                        [ngClass]="{'empty':true}" style="min-height:400px;overflow-x: auto;">
+                                        <div class="row mx-0">
+                                            <ng-container
+                                                *ngFor="let item of (main?.fields? main?.fields:[]);let l=index;">
+                                                <div class="field form-group col-md-6" [dndEffectAllowed]="'all'"
+                                                    [dndDraggable]="item">
+                                                    <div class="row form-group">
+                                                        <div class="col-8">
+                                                            <div *ngIf="item.type=='textbox'">
+                                                                <label>{{item.label}}</label>
+                                                                <label *ngIf="item.required"
+                                                                    class="text-danger">*</label>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="{{item.placeholder}}">
+                                                            </div>
+                                                            <div *ngIf="item.type=='email'">
+                                                                <label>{{item.label}}</label>
+                                                                <label *ngIf="item.required"
+                                                                    class="text-danger">*</label>
+                                                                <input type="email" class="form-control"
+                                                                    placeholder="{{item.placeholder}}">
+                                                            </div>
+                                                            <div *ngIf="item.type=='phone'">
+                                                                <label>{{item.label}}</label>
+                                                                <label *ngIf="item.required"
+                                                                    class="text-danger">*</label>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="{{item.placeholder}}">
+                                                            </div>
+                                                            <div *ngIf="item.type=='number'">
+                                                                <label>{{item.label}}</label>
+                                                                <label *ngIf="item.required"
+                                                                    class="text-danger">*</label>
+                                                                <input type="number" class="form-control"
+                                                                    min="{{item.min}}" max="{{item.max}}"
+                                                                    placeholder="{{item.placeholder}}">
+                                                            </div>
+                                                            <div *ngIf="item.type=='date'">
+                                                                <label>{{item.label}}</label>
+                                                                <label *ngIf="item.required"
+                                                                    class="text-danger">*</label>
+                                                                <input type="date" class="form-control"
+                                                                    placeholder="{{item.placeholder}}">
+                                                            </div>
+                                                            <div *ngIf="item.type=='datetime-local'">
+                                                                <label>{{item.label}}</label>
+                                                                <label *ngIf="item.required"
+                                                                    class="text-danger">*</label>
+                                                                <input type="datetime-local" class="form-control"
+                                                                    placeholder="{{item.placeholder}}">
+                                                            </div>
+                                                            <div *ngIf="item.type=='textarea'">
+                                                                <label>{{item.label}}</label>
+                                                                <label *ngIf="item.required"
+                                                                    class="text-danger">*</label>
+                                                                <textarea type="datetime-local" class="form-control"
+                                                                    placeholder="{{item.placeholder}}"></textarea>
+                                                            </div>
+                                                            <div *ngIf="item.type=='paragrap'">
+                                                                <p class="form-text">
+                                                                    {{item.placeholder}}
+                                                                </p>
+                                                            </div>
+                                                            <div *ngIf="item.type=='dropdown'">
+                                                                <label>{{item.label}}</label>
+                                                                <label *ngIf="item.required"
+                                                                    class="text-danger">*</label>
+                                                                <select class="form-control">
+                                                                    <option *ngFor="let v of item.options"
+                                                                        [value]="v.option">
+                                                                        {{v.id}}
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                            <div *ngIf="item.type=='checkbox'">
+                                                                <label>{{item.label}}</label>
+                                                                <label *ngIf="item.required"
+                                                                    class="text-danger">*</label>
+                                                                <div *ngFor="let v of item.options"
+                                                                    class="inline-form-group">
+                                                                    <label class="cust-check-box">
+                                                                        <input type="checkbox" [value]="v.option"
+                                                                            name="{{item.name}}"
+                                                                            (click)="toggleValue(v)">
+                                                                        {{v.id}}
+                                                                        <span class="chekmark"></span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div *ngIf="item.type=='radiobutton'">
+                                                                <label>{{item.label}}</label>
+                                                                <label *ngIf="item.required"
+                                                                    class="text-danger">*</label>
+                                                                <div *ngFor="let v of item.options"
+                                                                    class="inline-form-group">
+                                                                    <label class="cust-check-box">
+                                                                        <input type="radio" [value]="v.option"
+                                                                            name="{{item.name}}"
+                                                                            (click)="toggleValue(v)">
+                                                                        {{v.id}}
+                                                                        <span class="chekmark"></span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-3 d-flex justify-content-between">
+                                                            <i *ngIf="item.toggle" style="cursor: pointer;"
+                                                                (click)="item.toggle=false"
+                                                                class="fa fa-chevron-up mx-1"></i>
+                                                            <i *ngIf="!item.toggle" style="cursor: pointer;"
+                                                                (click)="item.toggle=true"
+                                                                class="fa fa-chevron-down mx-1"></i>
+                                                            <i (click)="removeField1(i,l)" class="fa fa-trash mx-1"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div *ngIf="item.toggle" class="toggle-wrapper">
+                                                        <div class="form-group">
+                                                            <label>Required</label>
+                                                            <i *ngIf="item.required" (click)="item.required=false"
+                                                                class="fa fa-toggle-on red"
+                                                                style="cursor: pointer;"></i>
+                                                            <i *ngIf="!item.required" (click)="item.required=true"
+                                                                class="fa fa-toggle-off" style="cursor: pointer;"></i>
+                                                            <span class="pull-right ucfirst">
+                                                                {{item.type}}
+                                                            </span>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Label</label>
+                                                            <input class="form-control" type="text"
+                                                                [(ngModel)]="item.label">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Name</label>
+                                                            <input class="form-control" type="text"
+                                                                [(ngModel)]="item.name">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Placeholder</label>
+                                                            <input class="form-control" type="text"
+                                                                [(ngModel)]="item.placeholder">
+                                                        </div>
+                                                        <div *ngIf="item.required" class="form-group">
+                                                            <label>Regex</label>
+                                                            <input class="form-control" type="text"
+                                                                [(ngModel)]="item.regex">
+                                                        </div>
+                                                        <div *ngIf="item.required" class="form-group">
+                                                            <label>Error Text</label>
+                                                            <input class="form-control" type="text"
+                                                                [(ngModel)]="item.errorText">
+                                                        </div>
+                                                        <div *ngIf="item.type=='number'" class="row">
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label>Max</label>
+                                                                    <input class="form-control" type="text"
+                                                                        [(ngModel)]="item.max">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label>Min</label>
+                                                                    <input class="form-control" type="text"
+                                                                        [(ngModel)]="item.min">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div
+                                                            *ngIf="item.type=='radiobutton' || item.type=='checkbox' || item.type=='dropdown' ">
+                                                            <div class="row">
+                                                                <div class="col-5">
+                                                                    <div class="form-group">
+                                                                        <label>Label</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-5">
+                                                                    <div class="form-group">
+                                                                        <label>Value</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-2">
+                                                                    <div class="form-group">
+                                                                        <label>Action</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div *ngFor="let i of item.options; let valueIndex=index;"
+                                                                class="row">
+                                                                <div class="col-5">
+                                                                    <div class="form-group">
+                                                                        <input class="form-control" type="text"
+                                                                            [(ngModel)]="i.id" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-5">
+                                                                    <div class="form-group">
+                                                                        <input class="form-control" type="text"
+                                                                            [(ngModel)]="i.option" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-2">
+                                                                    <div class="form-group">
+                                                                        <label
+                                                                            (click)="item.options.splice(valueIndex,1)">remove</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-5">
+                                                                    <div class="form-group">
+                                                                        <input class="form-control" type="text"
+                                                                            [(ngModel)]="value.id" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-5">
+                                                                    <div class="form-group">
+                                                                        <input class="form-control" type="text"
+                                                                            [(ngModel)]="value.option" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-2">
+                                                                    <div class="form-group">
+                                                                        <label
+                                                                            (click)="addValue(item.options)">Add</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div class="d-flex flex-column h-100 justify-content-center" *ngIf="draggedFileds.length==0">
+                        <div class="text-center my-5">
+                            <div class="d-flex flex-column  justify-content-center my-5">
+                                <i class="fa fa-dropbox icon" style="font-size: 90px; color: cornflowerblue;"
+                                    aria-hidden="true"></i>
+                                <h6 class="text-muted"> Drop Here</h6>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+
+            </div>
+            <span *ngIf="!viewForm">
+                <div class="row" class="dndDropArea" [ngClass]="{'empty':true}"
+                    style="min-height:580px;overflow-x: auto;">
+                    <div class="col-md-12" *ngFor="let main of (draggedFileds?draggedFileds:[]);">
+                        <h6 style="color: blue; font-size: 18px; font-weight: 500;">{{main.name}}</h6>
+                        <hr />
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6" *ngFor="let data of (main?.fields ?main.fields:[] );">
+                                    <div [ngSwitch]="data.type">
+                                        <div class="col-md-12 form-group" *ngSwitchCase="'textbox'">
+                                            <label>{{data.label}}:<span *ngIf="data.required"
+                                                    class="required-field"></span></label>
+                                            <input #model="ngModel" type="text" class="form-control"
+                                                [(ngModel)]="data.value" [required]="data.required"
+                                                [placeholder]="data.placeholder?data.placeholder:''"
+                                                [pattern]="data.regex">
+                                            <div *ngIf="model.invalid && (model.dirty || model.touched)">
+                                                <span class="text-danger">
+                                                    <span *ngIf="model.errors.required">{{data.label}} is
+                                                        required</span>
+                                                    <span *ngIf="model.errors.pattern">{{data.errorText}}</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 form-group" *ngIf="data.type=='email'">
+                                        <label>{{data.label}}:<span *ngIf="data.required"
+                                                class="required-field"></span></label>
+                                        <input #model="ngModel" type="email" class="form-control"
+                                            [(ngModel)]="data.value" [required]="data.required"
+                                            [placeholder]="data.placeholder?data.placeholder:''" [pattern]="data.regex">
+                                        <div *ngIf="model.invalid && (model.dirty || model.touched)">
+                                            <span class="text-danger">
+                                                <span *ngIf="model.errors.required">{{data.label}} is
+                                                    required</span>
+                                                <span *ngIf="model.errors.pattern">{{data.errorText}}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 form-group" *ngIf="data.type=='phone'">
+                                        <label>{{data.label}}:<span *ngIf="data.required"
+                                                class="required-field"></span></label>
+                                        <input #model="ngModel" type="number" class="form-control"
+                                            [(ngModel)]="data.value" [required]="data.required"
+                                            [placeholder]="data.placeholder?data.placeholder:''" [pattern]="data.regex">
+                                        <div *ngIf="model.invalid && (model.dirty || model.touched)">
+                                            <span class="text-danger">
+                                                <span *ngIf="model.errors.required">{{data.label}} is
+                                                    required</span>
+                                                <span *ngIf="model.errors.pattern">{{data.errorText}}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 form-group" *ngIf="data.type=='number'">
+                                        <label>{{data.label}}:<span *ngIf="data.required"
+                                                class="required-field"></span></label>
+                                        <input #model="ngModel" type="number" class="form-control"
+                                            [(ngModel)]="data.value" [required]="data.required"
+                                            [placeholder]="data.placeholder?data.placeholder:''" [pattern]="data.regex">
+                                        <div *ngIf="model.invalid && (model.dirty || model.touched)">
+                                            <span class="text-danger">
+                                                <span *ngIf="model.errors.required">{{data.label}} is
+                                                    required</span>
+                                                <span *ngIf="model.errors.pattern">{{data.errorText}}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 form-group" *ngIf="data.type=='textaria'">
+                                        <label>{{data.label}}:<span *ngIf="data.required"
+                                                class="required-field"></span></label>
+                                        <textarea #model="ngModel" type="textaria" class="form-control"
+                                            [(ngModel)]="data.value" [required]="data.required"
+                                            [placeholder]="data.placeholder?data.placeholder:''" [pattern]="data.regex">
+                                        </textarea>
+                                        <div *ngIf="model.invalid && (model.dirty || model.touched)">
+                                            <span class="text-danger">
+                                                <span *ngIf="model.errors.required">{{data.label}} is
+                                                    required</span>
+                                                <span *ngIf="model.errors.pattern">{{data.errorText}}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 form-group" *ngIf="data.type=='paragrap'">
+                                        <label>{{data.label}}:<span *ngIf="data.required"
+                                                class="required-field"></span></label>
+                                        <textarea #model="ngModel" type="textaria" class="form-control"
+                                            [(ngModel)]="data.value" [required]="data.required"
+                                            [placeholder]="data.placeholder?data.placeholder:''" [pattern]="data.regex">
+                                        </textarea>
+                                        <div *ngIf="model.invalid && (model.dirty || model.touched)">
+                                            <span class="text-danger">
+                                                <span *ngIf="model.errors.required">{{data.label}} is
+                                                    required</span>
+                                                <span *ngIf="model.errors.pattern">{{data.errorText}}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 form-group" *ngIf="data.type=='date'">
+                                        <label>{{data.label}}:<span *ngIf="data.required"
+                                                class="required-field"></span></label>
+                                        <input #model="ngModel" type="date" class="form-control"
+                                            [(ngModel)]="data.value" [required]="data.required"
+                                            [placeholder]="data.placeholder?data.placeholder:''" [pattern]="data.regex">
+                                        <div *ngIf="model.invalid && (model.dirty || model.touched)">
+                                            <span class="text-danger">
+                                                <span *ngIf="model.errors.required">{{data.label}} is
+                                                    required</span>
+                                                <span *ngIf="model.errors.pattern">{{data.errorText}}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 form-group" *ngIf="data.type=='datetime-local'">
+                                        <label>{{data.label}}:<span *ngIf="data.required"
+                                                class="required-field"></span></label>
+                                        <input #model="ngModel" type="datetime-local" class="form-control"
+                                            [(ngModel)]="data.value" [required]="data.required"
+                                            [placeholder]="data.placeholder?data.placeholder:''" [pattern]="data.regex">
+                                        <div *ngIf="model.invalid && (model.dirty || model.touched)">
+                                            <span class="text-danger">
+                                                <span *ngIf="model.errors.required">{{data.label}} is
+                                                    required</span>
+                                                <span *ngIf="model.errors.pattern">{{data.errorText}}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 form-group" *ngIf="data.type=='dropdown'">
+                                        <label>{{data.label}}:<span *ngIf="data.required"
+                                                class="required-field"></span></label>
+                                        <select #ngModel="ngModel" [(ngModel)]="data.value" class="form-control">
+                                            <option *ngFor="let opt of data.options" [value]="opt.option">
+                                                {{opt.option}}
+                                            </option>
+                                        </select>
+                                        <!-- <div *ngIf="model.invalid && (model.dirty || model.touched)">
+                                            <span class="text-danger">
+                                                <span *ngIf="model.errors.required">{{data.label}} is
+                                                    required</span>
+                                                <span *ngIf="model.errors.pattern">{{data.errorText}}</span>
+                                            </span>
+                                        </div> -->
+                                    </div>
+                                    <div class="col-md-12 form-group" *ngIf="data.type=='radiobutton'">
+                                        <label >{{data.label}}:<span *ngIf="data.required"
+                                                class="required-field"></span></label>
+                                    
+                                        <mat-radio-group aria-labelledby="example-radio-group-label"
+                                            class="example-radio-group" [(ngModel)]="data.value" >
+                                            <mat-radio-button class="example-radio-button"
+                                                *ngFor="let opt of data.options" [value]="opt.option">
+                                                {{opt.option}}
+                                            </mat-radio-button>
+                                        </mat-radio-group>
+                                        <!-- <div *ngIf="model.invalid && (model.dirty || model.touched)">
+                                            <span class="text-danger">
+                                                <span *ngIf="model.errors.required">{{data.label}} is
+                                                    required</span>
+                                                <span *ngIf="model.errors.pattern">{{data.errorText}}</span>
+                                            </span>
+                                        </div> -->
+                                    </div>
+                                    <div class="col-md-12 form-group" *ngIf="data.type=='checkbox'">
+                                        <label >{{data.label}}<span *ngIf="data.required"
+                                                class="required-field"></span></label>
+                                        <li *ngFor="let opt of data.options"  >
+                                            <mat-checkbox [value]="opt.option">
+                                                {{opt.option}}
+                                            </mat-checkbox>
+                                        </li >
+                                        <!-- <div *ngIf="model.invalid && (model.dirty || model.touched)">
+                                            <span class="text-danger">
+                                                <span *ngIf="model.errors.required">{{data.label}} is
+                                                    required</span>
+                                                <span *ngIf="model.errors.pattern">{{data.errorText}}</span>
+                                            </span>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </span>
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button *ngIf="viewForm" class="btn btn-primary mr-3 mt-3 mb-3"
+                (click)="viewType('preview')">Preview</button>
+            <button *ngIf="!viewForm" class="btn btn-primary mr-3 mt-3 mb-3" (click)="viewType('form')">Form</button>
+            <button class="btn btn-primary mr-3 mt-3 mb-3" (click)="submit()">Submit</button>
+        </div>
+    </div>
+
+</div>

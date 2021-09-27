@@ -275,17 +275,6 @@ exports.validateOtp = (req, res) => {
                             setTimeout(() => {
                                 localStorage.removeItem('token')
                             }, 60000);
-
-                            var time=120
-                            clearInterval(count);
-                           var count= setInterval(() => {
-                                if(time>0){
-                                    time--;
-                                }
-                                else{
-                                    time=0;
-                                }
-                            }, 1000);
                         }
                     });
                 }

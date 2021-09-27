@@ -3,8 +3,6 @@ import { LoginandregistrationService } from '../../services/loginandregistration
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { clearInterval } from 'timers';
-import { start } from 'repl';
 
 @Component({
   selector: 'app-fogotpwd',

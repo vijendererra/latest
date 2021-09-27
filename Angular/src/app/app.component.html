@@ -1,4 +1,4 @@
-<div *ngIf="loginService.isLoggedIn()">
+<div *ngIf="login">
   <nav class="navbar navbar-expand-lg navbar-dark " id="navbar">
     <div class="collapse navbar-collapse" id="exp-navbar">
       <ul class="navbar-nav mr-auto">
@@ -6,11 +6,11 @@
           <a class="nav-link" routerLink="/curd" routerLinkActive="active" style="color: aliceblue;">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="expense/report" routerLinkActive="active" style="color: aliceblue;">Report</a>
+          <a class="nav-link" routerLink="/practice" routerLinkActive="active" style="color: aliceblue;">Practice</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="expense/addexpense" routerLinkActive="active" style="color: aliceblue;">Add
-            Expense</a>
+          <a class="nav-link" routerLink="dynamicdatatable" routerLinkActive="active" style="color: aliceblue;">
+            Dyanamic Data Table</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="about" routerLinkActive="active" style="color: aliceblue;">About</a>
@@ -46,7 +46,7 @@
 <br/>
 <router-outlet></router-outlet>
 <br/>
-<div *ngIf="loginService.isLoggedIn()">
+<div *ngIf="login">
 
   <footer class="footer  fixed-bottom" id="footer">
     <div class="container text-center text">
