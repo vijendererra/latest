@@ -4,6 +4,8 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http
 import { environment } from '../../environments/environment';
 import { Observable, throwError, BehaviorSubject, Subject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators'
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/app.state';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +20,7 @@ export class LoginandregistrationService {
   private data1: {};
   private content = new BehaviorSubject<string>("");
   public share = this.content.asObservable();
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient ,private store:Store<AppState>) { }
 
   private _refresh$ = new Subject<void>();
 

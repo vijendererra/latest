@@ -3,6 +3,7 @@ import { HttpClient ,HttpErrorResponse,HttpHeaders} from "@angular/common/http";
 import { CrudModel } from '../crud/model/model';
 import { environment } from '../../environments/environment';
 import { catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -23,10 +24,10 @@ export class CrudService {
     const url = environment.URL+ '/g';
     return this.http.get(url);
   }
-  postEmp(model: CrudModel) {
+  postEmp(model: CrudModel):Observable<any>{
     // const url='/p';
     const url = environment.URL+ '/p';
-    return this.http.post(url,model );
+    return this.http.post<any>(url,model );
   }
 
   putEmp(model: CrudModel) {

@@ -1,5 +1,8 @@
 <div *ngIf="login">
-  <nav class="navbar navbar-expand-lg navbar-dark " id="navbar">
+  <nav class="navbar navbar-expand-lg  fixed-top navbar-light" id="navbar">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#exp-navbar" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
     <div class="collapse navbar-collapse" id="exp-navbar">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
@@ -11,6 +14,10 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="dynamicdatatable" routerLinkActive="active" style="color: aliceblue;">
             Dyanamic Data Table</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="ngrx" routerLinkActive="active" style="color: aliceblue;">
+         Ngrx</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="about" routerLinkActive="active" style="color: aliceblue;">About</a>
@@ -44,13 +51,16 @@
   </nav>
 </div>
 <br/>
+<br/>
+<br/>
+<!-- {{counter$ | async}}:Hi.. -->
 <router-outlet></router-outlet>
 <br/>
 <div *ngIf="login">
 
   <footer class="footer  fixed-bottom" id="footer">
     <div class="container text-center text">
-      &copy; Sample MEAN app by Vijender | SampleApp 2020
+      &copy; Sample MEAN app by Vijender | SampleApp {{currentYear}}
     </div>
   </footer>
 </div>

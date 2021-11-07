@@ -13,6 +13,13 @@ import { element } from 'protractor';
 import * as JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { CurdState } from '../state/curd.state';
+import { Store } from '@ngrx/store';
+import { addData, deleteOne, loadData, upDateData } from '../state/curd.actions';
+import { Observable } from 'rxjs';
+import { getList } from '../state/curd.select';
+import { AppState } from 'src/app/store/app.state';
+import { getName } from 'src/app/ngrx-futer/state/ngrx-selecter';
 
 @Component({
   selector: 'app-crud',
@@ -37,7 +44,7 @@ export class CrudComponent implements OnInit {
   columnArray = [];
   timer: NodeJS.Timeout;
   constructor(private formBuilder: FormBuilder, private service: CrudService, private src: LoginandregistrationService,
-    public snackBar: MatSnackBar) { }
+    public snackBar: MatSnackBar, private store: Store<CurdState>) { }
 
   displayedColumns: string[] = ['checkBox', 'name', 'role', 'location', 'actions'];
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -61,6 +68,7 @@ export class CrudComponent implements OnInit {
   title;
   uploadFiles;
 
+  listdata: Observable<string>;
   name = new FormControl('');
   role = new FormControl('');
   location = new FormControl('');
@@ -87,7 +95,7 @@ export class CrudComponent implements OnInit {
           this.applayFiltr(val, 'location');
         }
       )
-  
+
     this.sr();
     this.RegForm = this.formBuilder.group({
       _id: [''],
@@ -105,10 +113,10 @@ export class CrudComponent implements OnInit {
   }
 
 
-  deBounce(val){
+  deBounce(val) {
 
-  clearTimeout(this.timer)
-   this.timer= setTimeout(() => {
+    clearTimeout(this.timer)
+    this.timer = setTimeout(() => {
       console.log(this.searchValue);
     }, 3000);
   }
@@ -141,34 +149,42 @@ export class CrudComponent implements OnInit {
 
   submitForm() {
     if (this.dialogaction == "Add") {
-      this.service.postEmp(this.RegForm.value).subscribe((res) => {
-        this.display = false;
-        this.snackBar.open("Save Successfully...", "dismiss", {
-          duration: 2000,
-          verticalPosition: 'top'
-        });
-        this.getData();
-      });
+      // this.service.postEmp(this.RegForm.value).subscribe((res) => {
+      //   this.display = false;
+      //   this.snackBar.open("Save Successfully...", "dismiss", {
+      //     duration: 2000,
+      //     verticalPosition: 'top'
+      //   });
+      //   this.getData();
+      // });
+      const savedata = this.RegForm.value;
+      this.store.dispatch(addData({ savedata }));
+      this.display = false;
+      // this.getData();
     }
     else if (this.dialogaction == "Edit") {
-      this.service.putEmp(this.RegForm.value).subscribe((res) => {
-        this.display = false;
-        this.snackBar.open("Updated Successfully", "dismiss", {
-          duration: 2000,
-          verticalPosition: 'top',
-          horizontalPosition:'center',
-          panelClass: 'snackbar-style'
-        });
-        this.getData();
-      });
+      const update = this.RegForm.value;
+      this.store.dispatch(upDateData({ update }));
+      this.display = false;
+      // this.getData();
+      // this.service.putEmp(this.RegForm.value).subscribe((res) => {
+      //   this.display = false;
+      //   this.snackBar.open("Updated Successfully", "dismiss", {
+      //     duration: 2000,
+      //     verticalPosition: 'top',
+      //     horizontalPosition: 'center',
+      //     panelClass: 'snackbar-style'
+      //   });
+      //   this.getData();
+      // });
     }
   }
 
   getData() {
-    this.loding = true;
-    this.service.getEmp().subscribe(res => {
-      this.clacuLatingNames(res);
-      this.data = res as CrudModel[];
+    this.store.dispatch(loadData())
+    this.store.select(getList).subscribe(data => {
+      this.clacuLatingNames(data);
+      this.data = data as CrudModel[];
       this.dataTable = new MatTableDataSource(this.data);
       this.dataTable.paginator = this.paginator;
       this.tasks = this.dataTable.data;
@@ -177,6 +193,19 @@ export class CrudComponent implements OnInit {
       // console.log(this.dataTable.data)
       this.loding = false;
     })
+    // this.listdata=this.store.select(getList);
+
+    // this.service.getEmp().subscribe(res => {
+    //   this.clacuLatingNames(res);
+    //   this.data = res as CrudModel[];
+    //   this.dataTable = new MatTableDataSource(this.data);
+    //   this.dataTable.paginator = this.paginator;
+    //   this.tasks = this.dataTable.data;
+    //   this.iterator();
+    //   this.totalSize = this.tasks.length;
+    //   // console.log(this.dataTable.data)
+    //   this.loding = false;
+    // })
   }
 
   clacuLatingNames(data) {
@@ -247,14 +276,18 @@ export class CrudComponent implements OnInit {
 
   deleteConfim(action) {
     if (action === "yes") {
-      this.service.deleteEmp(this.id).subscribe(res => {
-        this.getData();
-        this.deleConfemation = false;
+      //   this.service.deleteEmp(this.id).subscribe(res => {
+      //     this.getData();
+      //     this.deleConfemation = false;
 
-      },
-        err => {
-          console.log("delete", err);
-        })
+      //   },
+      //     err => {
+      //       console.log("delete", err);
+      //     })
+      const delete_id = this.id;
+      this.store.dispatch(deleteOne({ delete_id }));
+      this.deleConfemation = false;
+      // this.getData();
     }
     else {
       this.deleConfemation = false;
@@ -454,7 +487,7 @@ export class CrudComponent implements OnInit {
       value: val
     }
     if (val == "") {
-      
+
       this.columnArray.forEach((ele, i) => {
         if (ele.columnName == colName) {
           this.columnArray.splice(i, 1)
@@ -464,7 +497,7 @@ export class CrudComponent implements OnInit {
     else {
       if (this.columnArray.length > 0) {
         this.columnArray.forEach((ele, i) => {
-          if (ele.columnName== colName) {
+          if (ele.columnName == colName) {
             this.columnArray.splice(i, 1)
           }
         });

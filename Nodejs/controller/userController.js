@@ -62,7 +62,7 @@ exports.userLogin = async (req, res) => {
             // console.log('pwwd wro')
         }
         else {
-            jwt.sign({ user }, 'securitykey', (err, token) => {
+            jwt.sign({ user }, 'securitykey',{ expiresIn: '3h' }, (err, token) => {
                 res.json({
                     token
                 })
@@ -91,13 +91,14 @@ exports.jwtVeryfied = (req, res, next) => {
 exports.userLogedIn = (req, res) => {
     jwt.verify(req.token, 'securitykey', (err, user) => {
         if (err) {
-            res.status(400).json({ message: "Token Authorizatin Failed" })
-            // console.log("hi")
+            res.status(400).json({ message: "Session Time Out.." })
+            // console.log("hi token")
         }
         else {
             const id = user.user._id;
             User.findById(id, (err, data) => {
                 if (!err) {
+                    // console.log("hi")
                     res.json(data)
                 }
                 else {
@@ -302,7 +303,7 @@ exports.resetPwd = (req, res) => {
     var reset = req.params.token;
     var password = req.body.password;
     var confirmpassword = req.body.confirmpassword;
-    // console.log(password);
+    // console.log(req);
     if (reset) {
         jwt.verify(reset, 'secretkey', (error, decoder) => {
             if (error) {
@@ -319,6 +320,7 @@ exports.resetPwd = (req, res) => {
                         bcrypt.hash(password, 10, (err, hash) => {
                             if (!err) {
                                 this.password = hash;
+                                // console.log("pwd",this.password)
                                 return User.updateOne({ _id: user._id }, { $set: { password: this.password, confirmpassword: confirmpassword } }, (err, sucess) => {
                                     if (err) {
                                         return res.status(400).send({ error: "your password not updated" })

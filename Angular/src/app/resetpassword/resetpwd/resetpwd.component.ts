@@ -22,23 +22,24 @@ export class ResetpwdComponent implements OnInit {
   public token = "";
 
   ngOnInit() {
-  this.tokenTime();
+    this.tokenTime();
+    this.ResetForm = this.formBuilder.group({
+      password: ['', [Validators.required]],
+      confirmpassword: ['', [Validators.required]],
+    })
   }
 
-  tokenTime(){
+  tokenTime() {
     this.service.tokenTimeVerify().subscribe(
-      res=>{
-        this.jwttoken=res;
-        if(this.jwttoken.message=="token expires"){
+      res => {
+        this.jwttoken = res;
+        if (this.jwttoken.message == "token expires") {
           this._router.navigateByUrl('/');
         }
-        else{
+        else {
           this.token = this._activatedRoute.snapshot.paramMap.get("token")
           this._router.navigateByUrl('/forgotpwd/reset/' + this.token);
-          this.ResetForm = this.formBuilder.group({
-            password: ['', [Validators.required]],
-            confirmpassword: ['', [Validators.required]],
-          })
+
         }
       }
     )
@@ -46,13 +47,13 @@ export class ResetpwdComponent implements OnInit {
 
   resetPwd() {
     console.log("token", this.token);
-    this.service.resetPwd(this.ResetForm.value,this.token).subscribe(
-      res=>{
+    this.service.resetPwd(this.ResetForm.value, this.token).subscribe(
+      res => {
         this._router.navigateByUrl("");
       },
-      error=>{
+      error => {
         console.log(error)
-        this.serverErrorMessagesEmail=error.message;
+        this.serverErrorMessagesEmail = error.message;
       }
     )
   }

@@ -17,6 +17,11 @@ import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { initializeKeycloak } from './uitility/app.init';
+import { StoreModule } from '@ngrx/store';
+import { appReducer } from './store/app.state';
+import { LoadingSpinnerComponent } from './comman/loading-spinner/loading-spinner.component';
+import { EffectsModule } from '@ngrx/effects';
+import { LoggedInServce } from './login-registration/store/login.effects';
 
 
 
@@ -25,7 +30,8 @@ import { initializeKeycloak } from './uitility/app.init';
     AppComponent,
     PagenotfoundComponent,
     NavbarComponent,
-       
+    LoadingSpinnerComponent,
+
   ],
   imports: [
 
@@ -35,7 +41,10 @@ import { initializeKeycloak } from './uitility/app.init';
     CommonModule,
     SharedModule,
     HttpClientModule,
-    KeycloakAngularModule
+    KeycloakAngularModule,
+    StoreModule.forRoot(appReducer),
+    EffectsModule.forRoot(),
+    EffectsModule.forRoot([LoggedInServce]),
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

@@ -5,7 +5,7 @@
     <div *ngIf="regform">
       <div class="form-group">
         <input type="text" class="form-control" name="name" placeholder="Name" formControlName="name">
-        <div *ngIf="(RegForm.get('name').touched )" >
+        <div *ngIf="(RegForm.get('name').touched )">
           <div class="alert alert-danger" *ngIf="RegForm.get('name').errors?.required">
             Name Required...
           </div>
@@ -44,6 +44,21 @@
       <div class="form-group">
         <input type="Confirmpassword" class="form-control" name="confirm_password" placeholder="pinnumber"
           required="required" formControlName="pinnumber">
+      </div>
+      <div class="form-group">
+        <label>Please select your gender</label>
+        <div class="row" style="margin-left: 5px;">
+          <label >
+            <input type="radio" value="female" name="gender" formControlName="pinnumber1">
+            Female
+          </label>
+        </div>
+        <div class="row">
+          <label class="md-check">
+            <input type="radio" value="male" name="gender" formControlName="pinnumber1">
+            Male
+          </label>
+        </div>
       </div>
     </div>
     <div class="form-group" *ngIf="submit">

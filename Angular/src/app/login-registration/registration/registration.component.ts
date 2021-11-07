@@ -34,6 +34,7 @@ export class RegistrationComponent implements OnInit {
       phonenumber: ['', [Validators.required]],
       address: ['', [Validators.required]],
       pinnumber: ['', [Validators.required]],
+      pinnumber1: ['', [Validators.required]],
     })
   }
 

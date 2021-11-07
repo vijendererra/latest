@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { LoginandregistrationService } from '../../services/loginandregistration.service';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AppState } from 'src/app/store/app.state';
+import { Store } from '@ngrx/store';
+import { loggedIn } from '../store/login.actions';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +20,8 @@ export class LoginComponent implements OnInit {
   constructor(private service: LoginandregistrationService,
     private formBuilder: FormBuilder,
     private _router: Router,
-    private _activatedRoute: ActivatedRoute) { }
+    private _activatedRoute: ActivatedRoute,
+    private store:Store<AppState>) { }
 
   LoginForm: FormGroup;
   ngOnInit() {
@@ -55,24 +59,25 @@ export class LoginComponent implements OnInit {
   userData: any;
   url = '';
   userLogedIn() {
-    this.service.logedin().subscribe(
-      res => {
-        this.userData = res;
-        // console.log(this.userData);
-        localStorage.setItem('name', this.userData.name);
-        localStorage.setItem("id", this.userData._id);
-        if (this.userData.image != undefined) {
-          localStorage.removeItem('profile');
-          this.url = "http://localhost:2020/" + this.userData.image;
-          // console.log(this.url);
-          this.service.img(this.url);
-        }
-        this._router.navigateByUrl('/curd');
-      },
-      error => {
-        this.serverErrorMessagesEmail = error.message;
-      }
-    )
+    this.store.dispatch(loggedIn())
+    // this.service.logedin().subscribe(
+    //   res => {
+    //     this.userData = res;
+    //     // console.log(this.userData);
+    //     localStorage.setItem('name', this.userData.name);
+    //     localStorage.setItem("id", this.userData._id);
+    //     if (this.userData.image != undefined) {
+    //       localStorage.removeItem('profile');
+    //       this.url = "http://localhost:2020/" + this.userData.image;
+    //       // console.log(this.url);
+    //       this.service.img(this.url);
+    //     }
+    //     this._router.navigateByUrl('/curd');
+    //   },
+    //   error => {
+    //     this.serverErrorMessagesEmail = error.message;
+    //   }
+    // )
   }
 
   sharing() {

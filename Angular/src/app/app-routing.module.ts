@@ -40,7 +40,12 @@ const routes: Routes = [
     loadChildren:()=>import('./dynamic-data-tables/dynamic-data-tables.module').then(m=>m.DynamicDataTablesModule)
     // loadChildren:'./funtions-module/funtions-module.module#FuntionsModuleModule',canActivate:[AouthGuard]
   },
-
+  {
+    path:'ngrx',
+    loadChildren:()=>import('./ngrx-futer/ngrx-futer.module').then(m=>m.NgrxFuterModule)
+    // loadChildren:'./funtions-module/funtions-module.module#FuntionsModuleModule',canActivate:[AouthGuard]
+  },
+  
   {
     path: '**', component: PagenotfoundComponent
   }

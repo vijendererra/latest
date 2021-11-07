@@ -5,6 +5,8 @@ import { RegistrationComponent } from './registration/registration.component';
 
 import {SharedModule} from '../shared/shared.module'
 import{LoginRegistartinRoutingModule} from '../login-registration/login-registartin-routing/login-registartin-routing.module';
+import { EffectsModule } from '@ngrx/effects';
+import { LoggedInServce } from './store/login.effects';
 
 
 @NgModule({
@@ -13,6 +15,7 @@ import{LoginRegistartinRoutingModule} from '../login-registration/login-registar
     CommonModule,
     SharedModule,
     LoginRegistartinRoutingModule,
+    // EffectsModule.forFeature([LoggedInServce]),
 
   ]
 })

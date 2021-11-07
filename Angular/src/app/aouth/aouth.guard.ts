@@ -13,7 +13,7 @@ export class AouthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    if (this.service.isLoggedIn()) {
+    if (localStorage.getItem('token')) {
       // console.log(localStorage.getItem('token'));
       // console.log("outh")
       // this.router.navigateByUrl('/curd');
