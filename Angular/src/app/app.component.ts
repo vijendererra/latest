@@ -39,9 +39,12 @@ export class AppComponent implements OnInit {
     }
     this.store.select(getUser).subscribe(res => {
       this.userData = res;
+      // console.log(this.userData )
       if(this.userData){
         this.login=true;
-        this.profile = "http://localhost:2020/" + this.userData.image;
+        let remoteUrl="https://vijju-meanstack-app.herokuapp.com/";
+        let localUrl="http://localhost:2021/";
+        this.profile = remoteUrl+ this.userData.image;
         this.currentUser=this.userData.name;
       }
       else{
@@ -51,21 +54,21 @@ export class AppComponent implements OnInit {
 
   }
 
-  getRefrsh() {
-    this.loginService.refresh$.subscribe(() => {
-      this.getImg();
-    })
-  }
-  user = <any>[];
-  getImg() {
-    this.loginService.logedin().subscribe(res => {
-      this.user = res;
-      this.currentUser = this.user.name;
-      if (this.user.image != undefined) {
-        this.profile = "http://localhost:2020/" + this.user.image;
-      }
-    })
-  }
+  // getRefrsh() {
+  //   this.loginService.refresh$.subscribe(() => {
+  //     this.getImg();
+  //   })
+  // }
+  // user = <any>[];
+  // getImg() {
+  //   this.loginService.logedin().subscribe(res => {
+  //     this.user = res;
+  //     this.currentUser = this.user.name;
+  //     if (this.user.image != undefined) {
+  //       this.profile = "http://localhost:2020/" + this.user.image;
+  //     }
+  //   })
+  // }
   logOut() {
     const user=null
     this.store.dispatch(addUser({user}))

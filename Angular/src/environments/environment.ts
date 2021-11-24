@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   URL:"http://localhost:2020"
-  // URL:"https://vijju-practice.herokuapp.com"
+  // URL:"https://vijju-meanstack-app.herokuapp.com"
 
 };
 

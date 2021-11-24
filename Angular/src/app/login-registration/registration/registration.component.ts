@@ -60,7 +60,7 @@ export class RegistrationComponent implements OnInit {
     }
     if (this.all == true) {
       this.count++;
-      console.log(this.count);
+      // console.log(this.count);
       if (this.count == 0) {
         this.submit = false;
         this.next = true;

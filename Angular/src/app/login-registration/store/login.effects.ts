@@ -33,7 +33,13 @@ export class LoggedInServce {
     loggedIn$ = this.actions$.pipe(
             ofType(loggedIn), mergeMap((actin) => {
                 return this.loginSrc.logedin().pipe(map((user) => {
+                    if(user==null){
+                        this._router.navigateByUrl('/'); 
+                        localStorage.removeItem('token'); 
+                    }
+                    else{
                     this._router.navigateByUrl('/curd');
+                    }
                     return addUser({ user });
                 }),
                    catchError((err)=>{
