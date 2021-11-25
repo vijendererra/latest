@@ -44,6 +44,7 @@ export class LoggedInServce {
                 }),
                    catchError((err)=>{
                        console.log(err);
+                       localStorage.removeItem('token'); 
                        this._router.navigateByUrl('/');
                        return of();
                    })

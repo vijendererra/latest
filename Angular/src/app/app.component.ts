@@ -35,6 +35,7 @@ export class AppComponent implements OnInit {
     this.currentYear=new Date().getFullYear();
     this.counter$ = this.store.select(getCount)
     if(localStorage.getItem('token')){
+      // console.log(loggedIn())
     this.store.dispatch(loggedIn())
     }
     this.store.select(getUser).subscribe(res => {
