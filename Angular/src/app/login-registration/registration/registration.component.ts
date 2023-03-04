@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginandregistrationService } from '../../services/loginandregistration.service'
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -12,9 +12,9 @@ export class RegistrationComponent implements OnInit {
 
   serverErrorMessagesEmail: string;
  
-  RegForm: FormGroup;
+  RegForm: UntypedFormGroup;
   constructor(private service: LoginandregistrationService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private _router: Router,
     private _activatedRoute: ActivatedRoute) { }
 

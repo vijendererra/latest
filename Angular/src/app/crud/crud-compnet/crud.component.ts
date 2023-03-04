@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl } from '@angular/forms';
 import { CrudService } from '../../services/crud.service'
 import { CrudModel } from '../model/model';
 import { LoginandregistrationService } from '../../services/loginandregistration.service'
 
-// import {MatPaginator ,MatSort ,} from '@angular/material/paginator';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
+// import {MatPaginator ,MatSort ,} from '@angular/material/legacy-paginator';
+import {  MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { element } from 'protractor';
 import * as JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -43,7 +43,7 @@ export class CrudComponent implements OnInit {
   sletedValue: string;
   columnArray = [];
   timer: NodeJS.Timeout;
-  constructor(private formBuilder: FormBuilder, private service: CrudService, private src: LoginandregistrationService,
+  constructor(private formBuilder: UntypedFormBuilder, private service: CrudService, private src: LoginandregistrationService,
     public snackBar: MatSnackBar, private store: Store<CurdState>) { }
 
   displayedColumns: string[] = ['checkBox', 'name', 'role', 'location', 'actions'];
@@ -51,8 +51,8 @@ export class CrudComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
 
-  RegForm: FormGroup;
-  SearchForm: FormGroup;
+  RegForm: UntypedFormGroup;
+  SearchForm: UntypedFormGroup;
   private d: {};
   public tasks: any[];
   public pageSize = 5;
@@ -69,9 +69,9 @@ export class CrudComponent implements OnInit {
   uploadFiles;
 
   listdata: Observable<string>;
-  name = new FormControl('');
-  role = new FormControl('');
-  location = new FormControl('');
+  name = new UntypedFormControl('');
+  role = new UntypedFormControl('');
+  location = new UntypedFormControl('');
   searchValue;
   ngOnInit() {
     this.name.valueChanges.pipe(
@@ -449,7 +449,7 @@ export class CrudComponent implements OnInit {
     const data = "text"
     // const blob = new Blob([data], { type: 'text/plain' });
     // console.log(blob);
-    const url = window.URL.createObjectURL(data);
+    // const url = window.URL.createObjectURL(data);
     // console.log(encodeURIComponent(url));
     // var a = document.createElement("a");
     // document.body.appendChild(a);
@@ -459,7 +459,7 @@ export class CrudComponent implements OnInit {
     // a.click();
     // var res = encodeURIComponent(url);
     // window.URL.revokeObjectURL(url);
-    saveAs(url, "fileName");
+    // saveAs(url, "fileName");
   }
 
   dynamicDownlod() {

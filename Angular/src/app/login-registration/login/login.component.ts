@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginandregistrationService } from '../../services/loginandregistration.service';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from 'src/app/store/app.state';
 import { Store } from '@ngrx/store';
@@ -18,15 +18,15 @@ export class LoginComponent implements OnInit {
   serverErrorMessagesEmail: string;
 
   constructor(private service: LoginandregistrationService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
-    private store:Store<AppState>) { }
+    private store: Store<AppState>) { }
 
-  LoginForm: FormGroup;
+  LoginForm: UntypedFormGroup;
   ngOnInit() {
     // document.getElementById('navbar').style.display='none';
-    // document.getElementById('footer').style.display='none';    
+    // document.getElementById('footer').style.display='none';
     if (this.service.isLoggedIn()) {
 
       this._router.navigateByUrl('/curd');

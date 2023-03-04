@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, FormControl } from '@angular/forms';
 import { LoginandregistrationService } from '../../services/loginandregistration.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { error } from 'protractor';
@@ -16,10 +16,10 @@ export class ViewsComponent implements OnInit {
   edible: boolean;
 
   constructor(private loginService: LoginandregistrationService,
-    private router: Router, private formBuilder: FormBuilder) { }
+    private router: Router, private formBuilder: UntypedFormBuilder) { }
 
   private useData;
-  VieForm: FormGroup;
+  VieForm: UntypedFormGroup;
   ngOnInit() {
     this.edible = false;
     this.VieForm = this.formBuilder.group({

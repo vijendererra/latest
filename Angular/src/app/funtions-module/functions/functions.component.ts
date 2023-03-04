@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CrudService } from 'src/app/services/crud.service';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl } from '@angular/forms';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 
@@ -20,7 +20,7 @@ export class FunctionsComponent implements OnInit {
   timer: NodeJS.Timer;
   treeValue: string;
 
-  constructor(private src: CrudService, private formBuilder: FormBuilder,) { }
+  constructor(private src: CrudService, private formBuilder: UntypedFormBuilder,) { }
 
   treeControl = new NestedTreeControl<FoodNode>(node => node.children);
 
@@ -28,7 +28,7 @@ export class FunctionsComponent implements OnInit {
   hasChild = (_: number, node: FoodNode) => !!node.children && node.children.length > 0;
 
   list = <any>[];
-  dynamicForm: FormGroup;
+  dynamicForm: UntypedFormGroup;
   ngOnInit() {
     this.getLIst()
     this.treeVeiwData();
@@ -49,21 +49,21 @@ export class FunctionsComponent implements OnInit {
     this.allData.forEach(fileds => {
       if (fileds.required == "true") {
         if (fileds.type == "email") {
-          group[fileds.label] = new FormControl('', [Validators.required, Validators.email]);
+          group[fileds.label] = new UntypedFormControl('', [Validators.required, Validators.email]);
         }
         else {
-          group[fileds.label] = new FormControl('', [Validators.required]);
+          group[fileds.label] = new UntypedFormControl('', [Validators.required]);
         }
       }
       else {
         if (fileds.type == "phone") {
-          group[fileds.label] = new FormControl('', [Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]);
+          group[fileds.label] = new UntypedFormControl('', [Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]);
         } else {
-          group[fileds.label] = new FormControl('');
+          group[fileds.label] = new UntypedFormControl('');
         }
       }
     })
-    this.dynamicForm = new FormGroup(group);
+    this.dynamicForm = new UntypedFormGroup(group);
   }
 
   getLIst() {

@@ -1,6 +1,6 @@
 const { Crud } = require('../schema/schema')
 
-exports.save = async (req, res)=> {
+exports.save = async (req, res) => {
     try {
         var requestBody = req.body;
         var crud = new Crud({
@@ -29,19 +29,18 @@ exports.getAll = async (req, res) => {
     try {
         let result = await Crud.find((err, data) => {
             if (!err) {
-                res.json(data);
+                res.status(200).json(data);
                 // console.log(data);
             }
             else {
-                res, status(400).json({ error: err });
+                res.status(400).json({ error: err });
                 console.log(err);
             }
         })
         return result;
-
     }
     catch (err) {
-        console.log(err);
+        res.status(400).json({ error: err });
     }
 
 };

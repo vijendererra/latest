@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginandregistrationService } from '../../services/loginandregistration.service'
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -22,11 +22,11 @@ export class FogotpwdComponent implements OnInit {
   timeLeft: number;
   interval;
   constructor(private service: LoginandregistrationService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private _router: Router,
     private _activatedRoute: ActivatedRoute) { }
 
-  ForgotForm: FormGroup;
+  ForgotForm: UntypedFormGroup;
   ngOnInit() {
     this.ForgotForm = this.formBuilder.group({
       email: ['', [Validators.required]],
@@ -67,7 +67,7 @@ export class FogotpwdComponent implements OnInit {
       res => {
         this.response = res;
         this.successMessage = this.response.message;
-        if (this.successMessage == "Please loging your mail and set new password") {
+        if (this.successMessage == "Please login your mail and set new password") {
           this._router.navigateByUrl('/forgotpwd/reset/'+this.response.jwttoken);
           this.timer=false;
           this.success = true;

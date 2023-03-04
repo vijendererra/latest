@@ -13,14 +13,14 @@ import { AppState } from '../store/app.state';
 export class LoginandregistrationService {
   noAuthHeader = {
     headers: new HttpHeaders({
-      'NoAuth': 'True',
+      'Noauth': 'True',
     })
   };
 
   private data1: {};
   private content = new BehaviorSubject<string>("");
   public share = this.content.asObservable();
-  constructor(private http: HttpClient ,private store:Store<AppState>) { }
+  constructor(private http: HttpClient, private store: Store<AppState>) { }
 
   private _refresh$ = new Subject<void>();
 
@@ -94,7 +94,7 @@ export class LoginandregistrationService {
       catchError(this.handleError)
     );
   }
-  valiDateOtp(data){
+  valiDateOtp(data) {
     // const url = "https://vijjufirstapp.herokuapp.com/validateOTP";
     const url = environment.URL + '/validateOTP';
     return this.http.post(url, data, this.noAuthHeader).pipe(
@@ -102,7 +102,7 @@ export class LoginandregistrationService {
     );
   }
 
-  tokenTimeVerify(){
+  tokenTimeVerify() {
     // const url = "https://vijjufirstapp.herokuapp.com/tokenexpires";
     const url = environment.URL + '/tokenexpires';
 
@@ -129,7 +129,7 @@ export class LoginandregistrationService {
     );
   }
 
-  private handleError(error:HttpErrorResponse) {
+  private handleError(error: HttpErrorResponse) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
       // client-side error

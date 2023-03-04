@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginandregistrationService } from '../../services/loginandregistration.service'
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -13,11 +13,11 @@ export class ResetpwdComponent implements OnInit {
 
   serverErrorMessagesEmail: string;
   constructor(private service: LoginandregistrationService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private _router: Router,
     private _activatedRoute: ActivatedRoute) { }
 
-  ResetForm: FormGroup;
+  ResetForm: UntypedFormGroup;
 
   public token = "";
 

@@ -2,7 +2,7 @@
   <div class="collapse navbar-collapse" id="exp-navbar">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" routerLink="/curd" routerLinkActive="active" style="color: aliceblue;">Home</a>
+        <a class="nav-link" routerLink="/curd" routerLinkActive="active" style="color: aliceblue;">Dashbord</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" routerLink="expense/report" routerLinkActive="active" style="color: aliceblue;">Report</a>
@@ -18,9 +18,8 @@
     <form class="form-inline my-2 my-md-0" style="padding-right: 5% ;">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
-            style="color: aliceblue;" aria-expanded="false">Welcome:<span
-              style="color:black;">{{currentUser}}</span></a>
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" style="color: aliceblue;"
+            aria-expanded="false">Welcome:<span style="color:black;">{{currentUser}}</span></a>
           <div class="dropdown-menu" aria-labelledby="dropdown">
             <a class="dropdown-item" routerLink="/views">My Profile</a>
             <a class="dropdown-item" routerLink="/views/pwdchange"> Change Password</a>
@@ -35,7 +34,7 @@
 <router-outlet></router-outlet>
 
 <footer class="footer bg-primary fixed-bottom" id="footer">
-  <div class="container text-center">
+  <div class="container text-center text-white">
     &copy; Sample MEAN app by Vijender | SampleApp 2020
   </div>
 </footer>

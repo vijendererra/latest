@@ -126,7 +126,6 @@
       }
     }
   },
-  "defaultProject": "angular8",
   "cli": {
     "analytics": "0311dbd2-802e-441c-8d32-4cda38ee2755"
   }

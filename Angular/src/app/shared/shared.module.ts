@@ -8,7 +8,7 @@ import { ChildComponent } from '../comman/child/child.component';
 import { DndModule } from 'ngx-drag-drop';
 import { DynamicdatatablesComponent } from '../comman/dynamicdatatables/dynamicdatatables.component';
 import { Ng2FilterPipeModule } from 'ng2-filter-pipe';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
 
 
 

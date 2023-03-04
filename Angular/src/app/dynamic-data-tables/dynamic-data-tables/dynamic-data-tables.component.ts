@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CrudService } from 'src/app/services/crud.service';
 
 @Component({
@@ -14,8 +14,8 @@ export class DynamicDataTablesComponent implements OnInit {
   button: string;
   dialogaction: any;
 
-  constructor(private service: CrudService, private formBuilder: FormBuilder) { }
-  saveForm: FormGroup;
+  constructor(private service: CrudService, private formBuilder: UntypedFormBuilder) { }
+  saveForm: UntypedFormGroup;
   ngOnInit() {
     this.saveForm = this.formBuilder.group({
       _id: [''],

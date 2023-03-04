@@ -10,6 +10,7 @@ import { getCount } from './ngrx-futer/state/ngrx-selecter';
 import { CounterState } from './ngrx-futer/state/ngrx-state';
 import { addUser, loggedIn } from './login-registration/store/login.actions';
 import { getUser } from './login-registration/store/login.selecter';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -32,24 +33,23 @@ export class AppComponent implements OnInit {
   currentUser = '';
   profile = '';
   ngOnInit() {
-    this.currentYear=new Date().getFullYear();
+    this.currentYear = new Date().getFullYear();
     this.counter$ = this.store.select(getCount)
-    if(localStorage.getItem('token')){
+    if (localStorage.getItem('token')) {
       // console.log(loggedIn())
-    this.store.dispatch(loggedIn())
+      this.store.dispatch(loggedIn())
     }
     this.store.select(getUser).subscribe(res => {
       this.userData = res;
       // console.log(this.userData )
-      if(this.userData){
-        this.login=true;
-        let remoteUrl="https://vijju-meanstack-app.herokuapp.com/";
-        let localUrl="http://localhost:2021/";
-        this.profile = remoteUrl+ this.userData.image;
-        this.currentUser=this.userData.name;
+      if (this.userData) {
+        this.login = true;
+        const url = environment.URL + "/"
+        this.profile = url + this.userData.image;
+        this.currentUser = this.userData.name;
       }
-      else{
-        this.login=false;
+      else {
+        this.login = false;
       }
     })
 
@@ -71,8 +71,8 @@ export class AppComponent implements OnInit {
   //   })
   // }
   logOut() {
-    const user=null
-    this.store.dispatch(addUser({user}))
+    const user = null
+    this.store.dispatch(addUser({ user }))
     localStorage.removeItem('name');
     localStorage.removeItem('token');
     localStorage.removeItem('id');

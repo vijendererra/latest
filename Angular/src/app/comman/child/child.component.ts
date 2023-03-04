@@ -21,7 +21,18 @@ export class ChildComponent implements OnInit {
   }
 
 
+  radioValue="";
+  edit=false;
   ngOnInit() {
+  }
+
+  changeValue(){
+    if(this.radioValue=="Yes"){
+      this.edit=true;
+    }
+    else{
+      this.edit=false;
+    }
   }
 
 }

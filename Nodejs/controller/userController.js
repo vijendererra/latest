@@ -62,7 +62,7 @@ exports.userLogin = async (req, res) => {
             // console.log('pwwd wro')
         }
         else {
-            jwt.sign({ user }, 'securitykey',{ expiresIn: '3h' }, (err, token) => {
+            jwt.sign({ user }, 'securitykey', { expiresIn: '3h' }, (err, token) => {
                 res.json({
                     token
                 })
@@ -270,7 +270,7 @@ exports.validateOtp = (req, res) => {
                         }
                         else {
                             // console.log('mail sended succesfully');
-                            res.json({ message: "Please loging your mail and set new password", jwttoken: token })
+                            res.json({ message: "Please login your mail and set new password", jwttoken: token })
                             // res.json(req.session.user);
                             localStorage.setItem('token', true)
                             setTimeout(() => {
