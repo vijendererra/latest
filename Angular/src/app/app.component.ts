@@ -6,7 +6,6 @@ import { AppState } from './store/app.state';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { getCount } from './ngrx-futer/state/ngrx-selecter';
-import { CounterState } from './ngrx-futer/state/ngrx-state';
 import { addUser, loggedIn } from './login-registration/store/login.actions';
 import { getUser } from './login-registration/store/login.selecter';
 import { environment } from 'src/environments/environment';
@@ -19,7 +18,6 @@ import { environment } from 'src/environments/environment';
 })
 export class AppComponent implements OnInit {
 
-  private currentTheme: string = 'slate';
   login: boolean;
   counter$: Observable<number>
   userData: any;
@@ -88,13 +86,6 @@ export class AppComponent implements OnInit {
   //     this.login = false;
   //   }
   // }
-
-  theme(type) {
-    this.renderer.removeClass(document.body, 'theme-' + this.currentTheme);
-    this.currentTheme = type;
-    this.renderer.addClass(document.body, 'theme-' + this.currentTheme);
-    (<HTMLAnchorElement>this.documents.getElementById('theme')).href = '/assets/css/theme_' + type + '_bootstrap.min.css'
-  }
 
 
 }

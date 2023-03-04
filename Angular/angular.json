@@ -29,7 +29,6 @@
             ],
             "styles": [
               "src/styles.css",
-              "src/thems/custom-theme1.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/themes/saga-blue/theme.css",
