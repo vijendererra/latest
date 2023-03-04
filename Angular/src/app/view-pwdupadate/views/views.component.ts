@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators, FormControl } from '@angular/forms';
 import { LoginandregistrationService } from '../../services/loginandregistration.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { error } from 'protractor';
 
 
 @Component({

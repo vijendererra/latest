@@ -17,7 +17,7 @@ export class FunctionsComponent implements OnInit {
   allData = [];
   all: boolean;
   parent = [];
-  timer: NodeJS.Timer;
+  timer;
   treeValue: string;
 
   constructor(private src: CrudService, private formBuilder: UntypedFormBuilder,) { }

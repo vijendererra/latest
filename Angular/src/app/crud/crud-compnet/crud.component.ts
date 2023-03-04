@@ -9,8 +9,6 @@ import {  MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
-import { element } from 'protractor';
-import * as JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CurdState } from '../state/curd.state';
@@ -42,7 +40,7 @@ export class CrudComponent implements OnInit {
   deleConfemation: boolean;
   sletedValue: string;
   columnArray = [];
-  timer: NodeJS.Timeout;
+  timer;
   constructor(private formBuilder: UntypedFormBuilder, private service: CrudService, private src: LoginandregistrationService,
     public snackBar: MatSnackBar, private store: Store<CurdState>) { }
 

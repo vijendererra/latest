@@ -2,7 +2,6 @@ import { Component, Inject, OnInit, Renderer2, } from '@angular/core';
 import { LoginandregistrationService } from './services/loginandregistration.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
-import { KeycloakService } from 'keycloak-angular';
 import { AppState } from './store/app.state';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -27,7 +26,7 @@ export class AppComponent implements OnInit {
   currentYear: number;
   constructor(private loginService: LoginandregistrationService,
     private router: Router, private renderer: Renderer2, @Inject(DOCUMENT) private documents: Document,
-    private keyCloak: KeycloakService, private store: Store<AppState>) {
+     private store: Store<AppState>) {
 
   }
   currentUser = '';

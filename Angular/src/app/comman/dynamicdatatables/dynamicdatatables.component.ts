@@ -11,7 +11,7 @@ import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/materia
 })
 export class DynamicdatatablesComponent implements OnInit {
   allData = [];
-  timer: NodeJS.Timer;
+  timer;
   columnArray = [];
 
 
