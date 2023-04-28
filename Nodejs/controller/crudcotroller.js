@@ -1,104 +1,87 @@
-const { Crud } = require('../schema/schema')
+const { Crud } = require('../schema/schema');
 
 exports.save = async (req, res) => {
-    try {
-        var requestBody = req.body;
-        var crud = new Crud({
-            name: requestBody.name,
-            role: requestBody.role,
-            location: requestBody.location,
-        });
-        let result = await crud.save((err, data) => {
-            if (!err) {
-                res.send(data);
-            }
-            else {
-                res.status(400).send(err);
-                console.log(err);
-            }
-        })
-        return result;
-    }
-    catch (err) {
-        console.log(err)
-    }
+    var requestBody = req.body;
+    var crud = new Crud({
+        name: requestBody.name,
+        role: requestBody.role,
+        location: requestBody.location,
+    });
 
-};
+    try {
+        const result = await crud.save();
+        if (result)
+            res.json(result);
+        else {
+            res.status(400).json({ message: "Somethisng went wrong" });
+        }
+    }
+    catch (error) {
+        const message = error.message;
+        res.status(error.status || 500).json({ message });
+    }
+}
 
 exports.getAll = async (req, res) => {
     try {
-        let result = await Crud.find((err, data) => {
-            if (!err) {
-                res.status(200).json(data);
-                // console.log(data);
-            }
-            else {
-                res.status(400).json({ error: err });
-                console.log(err);
-            }
-        })
-        return result;
-    }
-    catch (err) {
-        res.status(400).json({ error: err });
+        const result = await Crud.find();
+        res.json(result);
+    } catch (error) {
+        const err = error.message || "Something went wrong";
+        res.status(400).json({ message: err });
     }
 
-};
+}
 
 exports.update = async (req, res) => {
+    var id = req.params._id;
+    var updateData = ({
+        name: req.body.name,
+        role: req.body.role,
+        location: req.body.location,
+    })
     try {
-        var id = req.params._id;
-        var updateData = ({
-            name: req.body.name,
-            role: req.body.role,
-            location: req.body.location,
-
-        })
-        let result = await Crud.findByIdAndUpdate(id, { $set: updateData }, { new: true }, (err, data) => {
-            if (!err) {
-                res.json(data);
-            }
-            else {
-                res.status(400).json({ message: "User Not Found" });
-                console.log(err);
-            }
-        })
-        return result;
-    }
-    catch (err) {
-        console.log(err);
+        const result = await Crud.findByIdAndUpdate(id, { $set: updateData }, { new: true });
+        if (result)
+            res.json(result);
+        else {
+            res.status(400).json({ message: id + " not found...!" });
+        }
+    } catch (error) {
+        const message = error.message;
+        res.status(error.status || 500).json({ message });
     }
 
 };
 
-exports.delete = async (req, res) => {
+exports.deleteById = async (req, res) => {
     try {
-        var id = req.params._id;
-        let result = await Crud.findByIdAndDelete(id, (err, data) => {
-            if (!err) {
-                res.json(data);
-            }
-            else {
-                res.status(400).send(err);
-                // console.log(err);
-            }
-        })
-        return result;
+        const id = req.params._id;
+        const result = await Crud.findByIdAndDelete(id);
+        if (result) {
+            res.json({ message: result.name + " deleted successfully..!" });
+        } else {
+            res.status(400).json({ message: id + " not found...!" });
+        }
+    } catch (error) {
+        const err = error.message || "Something went wrong"
+        res.status(500).json({ message: err });
     }
-    catch (err) {
-        console.log(err);
-    }
-};
+}
 
-exports.deleteOne = (req, res) => {
-    const names = req.params.name;
-    Crud.findOneAndDelete({ name: names }, (err, data) => {
-        if (!err) {
-            res.json(data);
+exports.deleteOne = async (req, res) => {
+    try {
+        const name = req.params.name;
+        console.log(name);
+        const result = await Crud.findOneAndDelete({ name });
+        if (result) {
+            res.json({ message: result.name + " deleted successfully..!" });
         }
         else {
-            res.status(400).send(err);
-            console.log(err);
+            res.status(400).send({ message: name + " not found...!" });
         }
-    })
+    } catch (error) {
+        const err = error.message;
+        res.status(500).json({ message: err });
+    }
 };

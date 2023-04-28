@@ -8,8 +8,8 @@ var multer = require('multer');
 router.post('/p', CrudController.save);
 router.get('/g',CrudController.getAll);
 router.put('/:_id',CrudController.update); 
-router.delete('/:_id',CrudController.delete);
-// router.delete('/:name',CrudController.deleteOne);   
+router.delete('/:_id',CrudController.deleteById);
+router.delete('/deleteOne/:name',CrudController.deleteOne);   
 
 
 
