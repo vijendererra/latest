@@ -13,18 +13,10 @@ var fs = require('fs');
 
 exports.registration = async function (req, res) {
     try {
-        var phonenumber = req.body.phonenumber;
+       const {name,email,phonenumber,password,confirmpassword,address,pinnumber} = req.body;
+        validator.validateName(name);
         validator.validatePhoneNumber(phonenumber);
-        const requestBody = req.body;
-        var userReg = new User({
-            name: requestBody.name,
-            email: requestBody.email,
-            password: requestBody.password,
-            confirmpassword: requestBody.confirmpassword,
-            phonenumber: requestBody.phonenumber,
-            address: requestBody.address,
-            pinnumber: requestBody.pinnumber,
-        });
+        var userReg = new User({name,email,phonenumber,password,confirmpassword,address,pinnumber});
         await userReg.save((err, result) => {
             if (err && err.code === 11000) {
                 res.status(400).json({ message: "Emaii was Already Exist" });
