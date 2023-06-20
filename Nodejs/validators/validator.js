@@ -1,12 +1,12 @@
 const status = require('http-status');
 validator = {}
 validator.validatePhoneNumber = (phonenumber) => {
-    if (phonenumber.trim().length >0) {
-        return true;
-    }
-    else{
-        return false;
-    }
+    // if (phonenumber.trim().length >0) {
+    //     return true;
+    // }
+    // else{
+    //     return false;
+    // }
     // // console.log('hi',new Error('status:400'));
     // else {
     //     // return (new Error('status:400'));
@@ -15,9 +15,9 @@ validator.validatePhoneNumber = (phonenumber) => {
     // return false;
 
 
-    // if (new String(phonenumber).length != 10) {
-    //     throw new Error(new Error('statu:400'));
-    // }
+    if (new String(phonenumber).length != 10) {
+        throw new Error('Phone number not valid');
+    }
 }
 
 validator.validateName = (name) => {

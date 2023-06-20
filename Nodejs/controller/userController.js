@@ -10,17 +10,11 @@ var LocalStorage = require('node-localstorage').LocalStorage,
 
 
 var fs = require('fs');
-// var util=require('util');
-// var log_file_err=fs.createWriteStream('error/errors.log',{flags:'a'})
 
-
-// User-Registration;
 exports.registration = async function (req, res) {
     try {
         var phonenumber = req.body.phonenumber;
         validator.validatePhoneNumber(phonenumber);
-        //    console.log("K",number);
-        // if (validator.validatePhoneNumber(req.body.phonenumber)) {
         const requestBody = req.body;
         var userReg = new User({
             name: requestBody.name,
@@ -31,47 +25,37 @@ exports.registration = async function (req, res) {
             address: requestBody.address,
             pinnumber: requestBody.pinnumber,
         });
-        let result = await userReg.save((err, result) => {
+        await userReg.save((err, result) => {
             if (err && err.code === 11000) {
                 res.status(400).json({ message: "Emaii was Already Exist" });
-            } else {
-                res.json(result);
+                return;
             }
+            res.json(result);
         });
-        return result;
     }
     catch (err) {
-        console.log(err)
+        res.status(400).json({ message: err.message });
     }
-
-    // }
-    // else if (!validator.validatePhoneNumber(req.body.phonenumber)) {
-    //     res.status(400).json({ message: "Please Enter valid Number" });
-    // }
 };
 
 
 //User-Login;
 exports.userLogin = async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
-    if (user) {
-        // console.log(user);
-        const comparingPassword = await bcrypt.compare(req.body.password, user.password);
-        if (!comparingPassword) {
-            res.status(420).json({ message: 'password wrong.', sucess: false });
-            // console.log('pwwd wro')
-        }
-        else {
-            jwt.sign({ user }, 'securitykey', { expiresIn: '3h' }, (err, token) => {
-                res.json({
-                    token
-                })
-            })
-        }
-    }
-    else {
+    if (!user) {
         res.status(421).json({ message: 'Email is wrong.', sucess: false });
+        return;
     }
+    const comparingPassword = await bcrypt.compare(req.body.password, user.password);
+    if (!comparingPassword) {
+        res.status(420).json({ message: 'password wrong.', sucess: false });
+        return;
+    }
+    jwt.sign({ user }, 'securitykey', { expiresIn: '3h' }, (err, token) => {
+        res.json({
+            token
+        })
+    })
 };
 
 
